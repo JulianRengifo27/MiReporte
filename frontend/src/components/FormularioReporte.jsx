@@ -13,6 +13,7 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
   const [foto, setFoto] = useState(null); // { archivo, url }
   const [punto, setPunto] = useState(ubicacion);
   const [error, setError] = useState('');
+  const [enviando, setEnviando] = useState(false);
   const contMapa = useRef(null);
 
   // Mini mapa con un pin arrastrable para ajustar la ubicación
@@ -45,11 +46,19 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
     setFoto({ archivo, url: URL.createObjectURL(archivo) });
   }
 
-  function enviar(ev) {
+  async function enviar(ev) {
     ev.preventDefault();
+    if (enviando) return;
     if (!tipo) { setError('Elige el tipo de emergencia.'); return; }
-    // En FASE 1 la foto se guarda solo en memoria (vista previa); en FASE 2 se subirá al servidor.
-    onEnviar({ tipo, descripcion: descripcion.trim(), lat: punto.lat, lng: punto.lng, foto: foto ? URL.createObjectURL(foto.archivo) : null });
+    setEnviando(true);
+    setError('');
+    try {
+      // La foto se sube al servidor junto con los datos
+      await onEnviar({ tipo, descripcion: descripcion.trim(), lat: punto.lat, lng: punto.lng, foto: foto?.archivo || null });
+    } catch (err) {
+      setError(err.message);
+      setEnviando(false);
+    }
   }
 
   return (
@@ -109,7 +118,9 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
 
         {error && <p className="error" role="alert">{error}</p>}
 
-        <button type="submit" className="boton boton-primario boton-enviar">Enviar reporte</button>
+        <button type="submit" className="boton boton-primario boton-enviar" disabled={enviando} aria-busy={enviando}>
+          {enviando ? 'Enviando…' : 'Enviar reporte'}
+        </button>
         <p className="aviso-123">Esta plataforma no reemplaza la línea 123. En una emergencia, llama al <a href="tel:123">123</a>.</p>
       </form>
     </div>

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { APP_NAME, APP_LEMA, RADIO_AVISO_M, MARGEN_PROXIMIDAD_M, TIPOS, TIPOS_CON_AREA } from './config.js';
-import { emergenciasMock, alertasClimaMock } from './data/mockData.js';
+import { obtenerEventos, obtenerAlertasClima, crearReporte, socket } from './api.js';
 import { distanciaMetros } from './utils/geo.js';
 import { useUbicacion, usePreferencia } from './hooks.js';
 import Mapa from './components/Mapa.jsx';
@@ -21,7 +21,11 @@ function hablar(texto) {
 
 export default function App() {
   const { ubicacion, estadoGPS } = useUbicacion();
-  const [emergencias, setEmergencias] = useState(emergenciasMock);
+  const [emergencias, setEmergencias] = useState([]);
+  const [alertasClima, setAlertasClima] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState('');
+  const [conectado, setConectado] = useState(socket.connected);
   const [seleccionada, setSeleccionada] = useState(null);
   const [formAbierto, setFormAbierto] = useState(false);
   const [vista, setVista] = useState('mapa'); // en celular: 'mapa' o 'lista'
@@ -36,10 +40,56 @@ export default function App() {
     document.documentElement.classList.toggle('alto-contraste', contraste);
   }, [escala, contraste]);
 
+  // Cargar emergencias de la API cuando ya sabemos dónde está el usuario
+  const cargarEventos = useCallback(async (punto) => {
+    try {
+      setEmergencias(await obtenerEventos(punto));
+      setErrorCarga('');
+    } catch (err) {
+      setErrorCarga(err.message);
+    } finally {
+      setCargando(false);
+    }
+  }, []);
+
+  const ubicacionRef = useRef(ubicacion);
+  ubicacionRef.current = ubicacion;
+
+  useEffect(() => {
+    if (estadoGPS === 'buscando') return; // esperamos la respuesta del GPS (o la negación)
+    cargarEventos(ubicacionRef.current);
+  }, [estadoGPS, cargarEventos]);
+
+  useEffect(() => {
+    obtenerAlertasClima().then(setAlertasClima).catch(() => {});
+  }, []);
+
+  // Tiempo real: Socket.IO avisa cuando hay un evento nuevo o actualizado
+  useEffect(() => {
+    // Inserta o reemplaza un evento en la lista
+    const guardar = (ev) => setEmergencias((lista) => [ev, ...lista.filter((x) => x.id !== ev.id)]);
+    const alConectar = () => {
+      setConectado(true);
+      cargarEventos(ubicacionRef.current); // por si nos perdimos algo mientras estábamos desconectados
+    };
+    const alDesconectar = () => setConectado(false);
+    socket.on('nuevo_evento', guardar);
+    socket.on('evento_actualizado', guardar);
+    socket.on('connect', alConectar);
+    socket.on('disconnect', alDesconectar);
+    return () => {
+      socket.off('nuevo_evento', guardar);
+      socket.off('evento_actualizado', guardar);
+      socket.off('connect', alConectar);
+      socket.off('disconnect', alDesconectar);
+    };
+  }, [cargarEventos]);
+
   // Calcular distancia al usuario y ordenar (activas primero, luego por distancia)
   const conDistancia = useMemo(() => {
     const peso = { activa: 0, en_atencion: 1, resuelta: 2 };
     return emergencias
+      .filter((e) => e.estado in peso) // por si llega algún estado no público
       .map((e) => ({ ...e, distancia: distanciaMetros(ubicacion, e) }))
       .sort((a, b) => peso[a.estado] - peso[b.estado] || a.distancia - b.distancia);
   }, [emergencias, ubicacion]);
@@ -62,22 +112,15 @@ export default function App() {
     cercanas.slice(0, 3).forEach((e) => partes.push(`${TIPOS[e.tipo].etiqueta} a ${Math.round(e.distancia)} metros.`));
     const zona = conDistancia.find((e) => TIPOS_CON_AREA.includes(e.tipo) && e.estado !== 'resuelta' && e.distancia <= e.radio_m + MARGEN_PROXIMIDAD_M);
     if (zona) partes.push(mensajeProximidad(zona));
-    alertasClimaMock.forEach((a) => partes.push(`Alerta ${a.nivel}: ${a.titulo}.`));
+    alertasClima.forEach((a) => partes.push(`Alerta ${a.nivel}: ${a.titulo}.`));
     hablar(partes.join(' '));
-  }, [textoAviso, cercanas, conDistancia]);
+  }, [textoAviso, cercanas, conDistancia, alertasClima]);
 
-  // Nuevo reporte (FASE 1: solo se agrega en memoria y aparece al instante en el mapa)
-  function enviarReporte(datos) {
-    const nueva = {
-      id: Date.now(),
-      ...datos,
-      radio_m: TIPOS_CON_AREA.includes(datos.tipo) ? 200 : 0,
-      estado: 'activa',
-      origen: 'ciudadano',
-      creado_en: new Date().toISOString(),
-      via_bloqueada: ['accidente', 'trancon', 'inundacion', 'deslizamiento'].includes(datos.tipo),
-    };
-    setEmergencias((lista) => [nueva, ...lista]);
+  // Nuevo reporte: se envía a la API. Si falla, el formulario muestra el error.
+  async function enviarReporte(datos) {
+    const { evento: nueva } = await crearReporte(datos);
+    // Lo agregamos de una vez (el socket también lo traerá; no se duplica porque se reemplaza por id)
+    setEmergencias((lista) => [nueva, ...lista.filter((x) => x.id !== nueva.id)]);
     setFormAbierto(false);
     setSeleccionada(nueva.id);
     setVista('mapa');
@@ -105,9 +148,17 @@ export default function App() {
       <div className={`aviso-superior ${cercanas.length ? 'aviso-peligro' : 'aviso-ok'}`} role="status" aria-live="polite">
         <span aria-hidden="true">{cercanas.length ? '⚠️' : '✅'}</span> {textoAviso}
         {estadoGPS === 'denegado' && <small> · Sin GPS: mostrando Bogotá</small>}
+        {!conectado && !errorCarga && !cargando && <small> · Reconectando tiempo real…</small>}
       </div>
 
-      <AlertasClima alertas={alertasClimaMock} />
+      {errorCarga && (
+        <div className="aviso-superior aviso-error" role="alert">
+          {errorCarga} <button type="button" className="boton boton-secundario" onClick={() => cargarEventos(ubicacion)}>Reintentar</button>
+        </div>
+      )}
+      {cargando && <div className="aviso-superior aviso-ok" role="status">Cargando emergencias…</div>}
+
+      <AlertasClima alertas={alertasClima} />
 
       {/* Pestañas solo visibles en celular */}
       <div className="pestanas" role="tablist">

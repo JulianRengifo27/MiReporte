@@ -262,3 +262,5 @@ button { font-family: inherit; font-size: 1rem; cursor: pointer; }
   position: fixed; left: 50%; bottom: 8rem; transform: translateX(-50%); z-index: 60;
   background: #1b5e20; color: #fff; padding: 0.8rem 1.2rem; border-radius: var(--radio); box-shadow: var(--sombra); font-weight: 700;
 }
+.aviso-error { background: #fde2e2; color: #8b0000; display: flex; gap: 0.6rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+.boton:disabled { opacity: 0.6; cursor: wait; }

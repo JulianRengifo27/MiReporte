@@ -19,7 +19,7 @@ function htmlPopup(e, ubicacion) {
       <div class="popup-titulo" style="--color:${t.color}">${t.icono} ${t.etiqueta}</div>
       <div class="popup-chips"><span class="chip ${ESTADOS[e.estado].clase}">${ESTADOS[e.estado].etiqueta}</span>${sello}</div>
       <p>${escaparHTML(e.descripcion || 'Sin descripción.')}</p>
-      ${e.foto ? `<img class="popup-foto" src="${escaparHTML(e.foto)}" alt="Foto del reporte" />` : ''}
+      ${e.foto_url ? `<img class="popup-foto" src="${escaparHTML(e.foto_url)}" alt="Foto del reporte" />` : ''}
       <p class="popup-hora">🕒 ${formatoHora(e.creado_en)} (${formatoHace(e.creado_en)})</p>
       <p class="popup-reco"><strong>Recomendación:</strong> ${t.recomendacion}</p>
       ${desvio}
