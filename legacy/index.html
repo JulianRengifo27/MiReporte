@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Plataforma De Emergencias Urbanas</title>
+    <link rel="preconnect" href="css/normalize.css" as="style">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="titulo">Plataforma De Emergencias Urbana</h1>
+        <h2 class="titulo">Bienvenido</h2>
+    </header>
+
+    <div class="nav-bg">
+        <nav class="navegacion-principal contenedor">
+            <a href="#">Inicio</a>
+            <a href="#">Mi cuenta</a>
+            <a href="#">Mis reportes</a>
+            <a href="#">Ultimos reportes</a>
+        </nav>
+    </div>
+    
+    <!-- NUEVA SECCIÓN: Contenedor dividido -->
+    <main class="contenedor-principal">
+        
+        <!-- Lado Izquierdo: Formulario -->
+        <aside class="sidebar-formulario">
+            <form class="formulario">
+                <input type="text" placeholder="Titulo del problema" class="campo-form">
+                
+                <textarea placeholder="Descripción de la Problemática" class="campo-form textarea"></textarea>
+                
+                <!-- Botón simulado para subir foto -->
+                <label for="foto" class="campo-form boton-adjuntar">Adjuntar Foto</label>
+                <input type="file" id="foto" style="display: none;">
+                
+                <button type="button" class="boton-reportar">Reportar</button>
+            </form>
+        </aside>
+
+        <!-- Lado Derecho: Integración API Google Maps -->
+        <section class="seccion-mapa">
+            <!-- Espacio para la Google Maps API. Usamos un iframe como base temporal -->
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.924108849646!2d-74.072092!3d4.711008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9a0000000000%3A0x0!2zQm9nb3TDoSwgQ29sb21iaWE!5e0!3m2!1ses!2sco!4v1700000000000" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </section>
+
+    </main>
+
+
+</body>
+
+</html>

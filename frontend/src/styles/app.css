@@ -1,0 +1,264 @@
+/* ===== Estilos de Pilas =====
+   Paleta y fuente tomadas del index.html original (rojos + Roboto Slab).
+   Diseño "mobile first": primero celular, luego pantallas grandes. */
+
+:root {
+  --rojo: #bd3a3a;
+  --rojo-oscuro: #8f2626;
+  --rojo-claro: #ffcccc;
+  --fondo: #f6f4f4;
+  --superficie: #ffffff;
+  --texto: #1a1a1a;
+  --texto-suave: #555;
+  --borde: #e2dcdc;
+  --ok: #2e7d32;
+  --sombra: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --radio: 14px;
+  font-family: 'Roboto Slab', Georgia, serif;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+/* Modo alto contraste (menú de accesibilidad) */
+:root.alto-contraste {
+  --rojo: #c00000;
+  --rojo-oscuro: #000;
+  --rojo-claro: #fff;
+  --fondo: #000;
+  --superficie: #000;
+  --texto: #fff;
+  --texto-suave: #fff;
+  --borde: #fff;
+  --ok: #00ff66;
+}
+:root.alto-contraste .tarjeta,
+:root.alto-contraste .modal,
+:root.alto-contraste .boton,
+:root.alto-contraste .panel-accesibilidad { border: 2px solid #fff; }
+:root.alto-contraste .maplibregl-popup-content { background: #000; color: #fff; border: 2px solid #fff; }
+:root.alto-contraste a { color: #ffff00; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body { background: var(--fondo); color: var(--texto); }
+button { font-family: inherit; font-size: 1rem; cursor: pointer; }
+:focus-visible { outline: 3px solid #ffb300; outline-offset: 2px; }
+
+.app { display: flex; flex-direction: column; height: 100dvh; }
+
+/* ---- Encabezado ---- */
+.encabezado {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem; background: var(--rojo); color: #fff;
+}
+.marca { display: flex; align-items: center; gap: 0.6rem; }
+.marca h1 { margin: 0; font-size: 1.6rem; font-weight: 900; line-height: 1; }
+.lema { margin: 0; font-size: 0.8rem; opacity: 0.9; }
+.marca-logo {
+  display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  background: #fff; color: var(--rojo); font-weight: 900; font-size: 1.5rem;
+}
+
+/* ---- Botones ---- */
+.boton {
+  min-height: 48px; padding: 0.6rem 1rem; border-radius: var(--radio);
+  border: 2px solid transparent; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+}
+.boton-primario { background: var(--rojo); color: #fff; }
+.boton-primario:hover { background: var(--rojo-oscuro); }
+.boton-secundario { background: var(--rojo-claro); color: var(--texto); border-color: var(--borde); }
+.boton-icono {
+  min-width: 48px; min-height: 48px; border-radius: 50%; border: none;
+  background: rgba(255, 255, 255, 0.2); color: inherit; font-size: 1.4rem;
+}
+
+/* ---- Accesibilidad ---- */
+.accesibilidad { position: relative; }
+.panel-accesibilidad {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: 240px;
+  display: flex; flex-direction: column; gap: 0.6rem; padding: 1rem;
+  background: var(--superficie); color: var(--texto); border-radius: var(--radio); box-shadow: var(--sombra);
+}
+.panel-titulo { margin: 0; font-weight: 900; }
+.fila-botones { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.fila-botones .boton { flex: 1; font-size: 1.2rem; }
+
+/* ---- Aviso superior y alertas climáticas ---- */
+.aviso-superior { padding: 0.7rem 1rem; font-weight: 700; text-align: center; }
+.aviso-peligro { background: #fff3cd; color: #6b4e00; }
+.aviso-ok { background: #e6f4ea; color: var(--ok); }
+:root.alto-contraste .aviso-superior { background: #000; color: #ffff00; border-bottom: 2px solid #fff; }
+
+.clima { display: flex; flex-direction: column; }
+.clima-alerta { border-bottom: 1px solid var(--borde); }
+.clima-cabecera {
+  width: 100%; display: flex; gap: 0.6rem; align-items: center; justify-content: space-between;
+  text-align: left; padding: 0.6rem 1rem; border: none; min-height: 44px; color: inherit;
+}
+.clima-cabecera span:nth-child(2) { flex: 1; }
+.clima-naranja .clima-cabecera { background: #ffe0b2; color: #5d2e00; }
+.clima-amarilla .clima-cabecera { background: #fff9c4; color: #4d4100; }
+.clima-detalle { padding: 0.2rem 1rem 0.8rem; background: var(--superficie); }
+.clima-detalle p { margin: 0.4rem 0; }
+:root.alto-contraste .clima-cabecera { background: #000; color: #fff; border: 1px solid #fff; }
+
+/* ---- Pestañas (solo celular) ---- */
+.pestanas { display: flex; background: var(--superficie); border-bottom: 1px solid var(--borde); }
+.pestanas button {
+  flex: 1; min-height: 48px; border: none; background: none; color: var(--texto);
+  font-weight: 700; border-bottom: 3px solid transparent;
+}
+.pestanas button[aria-selected='true'] { border-bottom-color: var(--rojo); color: var(--rojo); }
+
+/* ---- Zona principal ---- */
+.principal { flex: 1; display: flex; min-height: 0; position: relative; }
+.lateral { width: 100%; overflow-y: auto; padding: 0.8rem; background: var(--fondo); }
+.lateral-titulo { display: none; margin: 0.2rem 0 0.8rem; font-size: 1.2rem; }
+.zona-mapa { flex: 1; position: relative; min-height: 0; }
+.mapa { position: absolute; inset: 0; }
+
+/* En celular se muestra una vista a la vez */
+.vista-mapa .lateral { display: none; }
+.vista-lista .zona-mapa { display: none; }
+
+@media (min-width: 900px) {
+  .pestanas { display: none; }
+  .lateral { display: block !important; width: 380px; flex-shrink: 0; border-right: 1px solid var(--borde); }
+  .lateral-titulo { display: block; }
+  .zona-mapa { display: block !important; }
+}
+
+/* ---- Feed / tarjetas ---- */
+.feed { list-style: none; margin: 0; padding: 0 0 6rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.feed-vacio { text-align: center; color: var(--texto-suave); }
+.tarjeta {
+  width: 100%; display: flex; gap: 0.7rem; text-align: left; padding: 0.8rem;
+  background: var(--superficie); color: var(--texto); border: 1px solid var(--borde);
+  border-left: 6px solid var(--color); border-radius: var(--radio);
+}
+.tarjeta:hover, .tarjeta-activa { box-shadow: var(--sombra); }
+.tarjeta-activa { outline: 2px solid var(--color); }
+.tarjeta-resuelta { opacity: 0.6; }
+.tarjeta-icono { font-size: 1.8rem; }
+.tarjeta-cuerpo { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.tarjeta-fila { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; flex-wrap: wrap; }
+.tarjeta-distancia { font-weight: 700; color: var(--rojo); }
+.tarjeta-desc { font-size: 0.9rem; color: var(--texto-suave); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tarjeta-meta { font-size: 0.8rem; justify-content: flex-start; }
+
+/* Chips de estado y origen */
+.chip { padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+.estado-activa { background: #fde2e2; color: #a40000; }
+.estado-atencion { background: #fff1c2; color: #6b4e00; }
+.estado-resuelta { background: #dff3e3; color: #1b5e20; }
+.chip-ciudadano { background: #eceff1; color: #37474f; }
+.sello-oficial {
+  padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.78rem; font-weight: 900;
+  background: #0d47a1; color: #fff;
+}
+
+/* ---- Marcadores del mapa ---- */
+.marcador {
+  width: 42px; height: 42px; border-radius: 50%; padding: 0;
+  background: var(--color); border: 3px solid #fff; box-shadow: var(--sombra);
+  display: grid; place-items: center; font-size: 1.2rem;
+}
+.marcador-oficial { border-color: #0d47a1; border-width: 4px; }
+.marcador-resuelto { opacity: 0.45; filter: grayscale(0.6); }
+.marcador-usuario {
+  width: 18px; height: 18px; border-radius: 50%; background: #1e88e5; border: 3px solid #fff;
+  box-shadow: 0 0 0 6px rgba(30, 136, 229, 0.3);
+}
+
+/* ---- Popup ---- */
+.maplibregl-popup-content { border-radius: var(--radio); padding: 0.9rem; font-family: inherit; }
+.maplibregl-popup-close-button { font-size: 1.4rem; width: 32px; height: 32px; }
+.popup p { margin: 0.4rem 0; font-size: 0.9rem; }
+.popup-titulo { font-weight: 900; font-size: 1.1rem; border-left: 5px solid var(--color); padding-left: 0.5rem; }
+.popup-chips { display: flex; gap: 0.3rem; flex-wrap: wrap; margin: 0.4rem 0; }
+.popup-hora { color: var(--texto-suave); }
+.popup-foto { width: 100%; max-height: 160px; object-fit: cover; border-radius: 8px; }
+.popup-desvio { background: #fff3cd; color: #4d3800; padding: 0.5rem; border-radius: 8px; font-size: 0.85rem; }
+.boton-ruta {
+  display: block; margin-top: 0.5rem; padding: 0.7rem; text-align: center; border-radius: 10px;
+  background: var(--rojo); color: #fff !important; font-weight: 700; text-decoration: none;
+}
+
+/* ---- Leyenda ---- */
+.leyenda {
+  position: absolute; left: 0.6rem; bottom: 1.8rem; z-index: 2;
+  display: flex; flex-wrap: wrap; gap: 0.3rem 0.7rem; max-width: 60%;
+  background: rgba(255, 255, 255, 0.92); padding: 0.4rem 0.6rem; border-radius: 10px; font-size: 0.75rem; color: #1a1a1a;
+}
+.leyenda i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+
+/* ---- Botón flotante "Reportar emergencia" ---- */
+.boton-reportar-flotante {
+  position: fixed; right: 1rem; bottom: 3.2rem; z-index: 20;
+  min-height: 64px; padding: 0 1.5rem; border: none; border-radius: 999px;
+  background: var(--rojo); color: #fff; font-size: 1.15rem; font-weight: 900; box-shadow: 0 6px 20px rgba(189, 58, 58, 0.5);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.boton-reportar-flotante span { font-size: 1.6rem; }
+.boton-reportar-flotante:hover { background: var(--rojo-oscuro); }
+:root.alto-contraste .boton-reportar-flotante { border: 3px solid #fff; }
+
+/* ---- Pie ---- */
+.pie { padding: 0.5rem 1rem; font-size: 0.8rem; text-align: center; background: var(--rojo-oscuro); color: #fff; }
+.pie a { color: #fff; font-weight: 900; }
+
+/* ---- Modales ---- */
+.modal-fondo {
+  position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.55);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.modal {
+  width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto;
+  background: var(--superficie); color: var(--texto); padding: 1.2rem;
+  border-radius: 20px 20px 0 0; box-shadow: var(--sombra);
+}
+@media (min-width: 600px) {
+  .modal-fondo { align-items: center; }
+  .modal { border-radius: 20px; }
+}
+.modal-cabecera { display: flex; justify-content: space-between; align-items: center; }
+.modal-cabecera h2 { margin: 0; }
+.modal-cabecera .boton-icono { background: var(--rojo-claro); color: var(--texto); }
+.modal-acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+
+.modal-alerta { text-align: center; border-top: 8px solid var(--color); }
+.modal-alerta-icono { font-size: 3rem; }
+.modal-alerta h2 { margin: 0.3rem 0; }
+.modal-alerta p { font-size: 1.1rem; }
+
+/* ---- Formulario de reporte ---- */
+.modal-formulario { display: flex; flex-direction: column; gap: 1rem; }
+.tipos { border: none; padding: 0; margin: 0; }
+.tipos legend, .campo-etiqueta { font-weight: 700; margin-bottom: 0.5rem; display: block; }
+.tipos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.tipo-boton {
+  min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
+  border: 2px solid var(--borde); border-radius: var(--radio); background: var(--superficie); color: var(--texto); font-weight: 700; font-size: 0.85rem;
+}
+.tipo-boton span { font-size: 1.6rem; }
+.tipo-elegido { border-color: var(--color); background: color-mix(in srgb, var(--color) 18%, var(--superficie)); box-shadow: 0 0 0 2px var(--color); }
+.campo { display: flex; flex-direction: column; gap: 0.3rem; }
+.campo small { color: var(--texto-suave); }
+.campo textarea {
+  font-family: inherit; font-size: 1rem; padding: 0.7rem; border-radius: var(--radio);
+  border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); resize: vertical;
+}
+.mini-mapa { height: 180px; border-radius: var(--radio); overflow: hidden; border: 2px solid var(--borde); }
+.boton-foto { cursor: pointer; }
+.foto-previa { max-height: 140px; object-fit: cover; border-radius: var(--radio); }
+.boton-enviar { min-height: 56px; font-size: 1.15rem; }
+.error { color: #b00020; font-weight: 700; margin: 0; }
+:root.alto-contraste .error { color: #ff6666; }
+.aviso-123 { margin: 0; text-align: center; font-size: 0.85rem; color: var(--texto-suave); }
+
+/* ---- Mensaje de confirmación ---- */
+.toast {
+  position: fixed; left: 50%; bottom: 8rem; transform: translateX(-50%); z-index: 60;
+  background: #1b5e20; color: #fff; padding: 0.8rem 1.2rem; border-radius: var(--radio); box-shadow: var(--sombra); font-weight: 700;
+}
