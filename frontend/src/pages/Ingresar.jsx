@@ -25,7 +25,7 @@ export default function Ingresar({ mensaje }) {
       // Lleva a cada rol a su sección principal (si venía de una página protegida, se queda en ella)
       if (ruta === '/ingresar') {
         const p = r.usuario.permisos;
-        ir(p.includes('revisar_reportes') ? '/admin' : p.includes('publicar_oficial') ? '/oficial' : '/');
+        ir(p.includes('revisar_reportes') ? '/admin' : p.includes('publicar_oficial') ? '/oficial' : '/mapa');
       }
     } catch (err) {
       setError(err.message);

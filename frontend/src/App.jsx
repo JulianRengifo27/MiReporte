@@ -1,6 +1,8 @@
 // ===== Esqueleto de la app: encabezado, menú, página actual y pie =====
 import { useEffect, useState } from 'react';
-import { APP_NAME, APP_LEMA } from './config.js';
+import { APP_NAME } from './config.js';
+import Logo from './components/Logo.jsx';
+import Bienvenida from './pages/Bienvenida.jsx';
 import { useUbicacion, usePreferencia } from './hooks.js';
 import { useRuta } from './ruta.js';
 import { useSesion } from './sesion.jsx';
@@ -34,7 +36,7 @@ export default function App() {
   const protegida = (permiso, pagina) => {
     if (verificando) return <div className="pagina"><p>Verificando sesión…</p></div>;
     if (!usuario) return <Ingresar mensaje="Inicia sesión para entrar a esta sección." />;
-    if (!tiene(permiso)) return <div className="pagina"><h2>Sin acceso</h2><p>Tu cuenta no tiene permiso para ver esta sección.</p><a className="boton boton-primario" href="#/">Volver al mapa</a></div>;
+    if (!tiene(permiso)) return <div className="pagina"><h2>Sin acceso</h2><p>Tu cuenta no tiene permiso para ver esta sección.</p><a className="boton boton-primario" href="#/mapa">Ir al mapa</a></div>;
     return pagina;
   };
 
@@ -47,46 +49,47 @@ export default function App() {
     case '/privacidad': pagina = <Privacidad />; break;
     case '/terminos': pagina = <Terminos />; break;
     case '/compartir': pagina = <Compartir />; break;
-    default: pagina = <Inicio ubicacion={ubicacion} estadoGPS={estadoGPS} registrarEscuchar={setEscucharPagina} />;
+    case '/mapa': pagina = <Inicio ubicacion={ubicacion} estadoGPS={estadoGPS} registrarEscuchar={setEscucharPagina} />; break;
+    default: pagina = <Bienvenida />;
   }
+  const esMapa = ruta === '/mapa';
 
   const enlace = (href, texto) => (
     <a href={`#${href}`} aria-current={ruta === href ? 'page' : undefined}>{texto}</a>
   );
 
   return (
-    <div className={`app ${ruta === '/' || !ruta ? 'app-mapa' : 'app-pagina'}`}>
+    <div className={`app ${esMapa ? 'app-mapa' : 'app-pagina'}`}>
+      <a className="saltar" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
       <header className="encabezado">
-        <a className="marca" href="#/">
-          <span className="marca-logo" aria-hidden="true">!</span>
-          <div>
-            <h1>{APP_NAME}</h1>
-            <p className="lema">{APP_LEMA}</p>
-          </div>
-        </a>
-        <MenuAccesibilidad
-          escala={escala} setEscala={setEscala}
-          contraste={contraste} setContraste={setContraste}
-          onEscuchar={() => (ruta === '/' && escucharPagina ? escucharPagina() : hablar(AVISO_123))}
-        />
+        <a className="marca" href="#/" aria-label={`${APP_NAME}, ir al inicio`}><Logo /></a>
+
+        <nav className="navegacion" aria-label="Menú principal">
+          {enlace('/', 'Inicio')}
+          {enlace('/mapa', 'Mapa')}
+          {usuario && tiene('ver_mis_reportes') && enlace('/mis-reportes', 'Mis reportes')}
+          {tiene('publicar_oficial') && enlace('/oficial', 'Panel oficial')}
+          {tiene('revisar_reportes') && enlace('/admin', 'Administración')}
+          {enlace('/compartir', 'Compartir')}
+        </nav>
+
+        <div className="encabezado-acciones">
+          {usuario
+            ? <button type="button" className="boton-texto" onClick={() => { salir(); window.location.hash = '/'; }}>Salir</button>
+            : <a className="boton-texto" href="#/ingresar" aria-current={ruta === '/ingresar' ? 'page' : undefined}>Ingresar</a>}
+          <MenuAccesibilidad
+            escala={escala} setEscala={setEscala}
+            contraste={contraste} setContraste={setContraste}
+            onEscuchar={() => (esMapa && escucharPagina ? escucharPagina() : hablar(AVISO_123))}
+          />
+        </div>
       </header>
 
-      <nav className="navegacion" aria-label="Menú principal">
-        {enlace('/', '🗺️ Mapa')}
-        {usuario && tiene('ver_mis_reportes') && enlace('/mis-reportes', '📋 Mis reportes')}
-        {tiene('publicar_oficial') && enlace('/oficial', '🛡️ Panel oficial')}
-        {tiene('revisar_reportes') && enlace('/admin', '⚙️ Administración')}
-        {enlace('/compartir', '📲 Compartir')}
-        {usuario
-          ? <button type="button" onClick={() => { salir(); window.location.hash = '/'; }}>Salir ({usuario.nombre.split(' ')[0]})</button>
-          : enlace('/ingresar', '👤 Ingresar')}
-      </nav>
-
-      {pagina}
+      <div id="contenido" tabIndex={-1} className="contenido">{pagina}</div>
 
       <footer className="pie">
-        <strong>Esta plataforma no reemplaza la línea 123. En una emergencia, llama al <a href="tel:123">123</a>.</strong>
-        <span className="pie-enlaces"><a href="#/privacidad">Política de privacidad</a> · <a href="#/terminos">Términos</a></span>
+        <span>Esta plataforma no reemplaza la línea 123. En una emergencia, llama al <a href="tel:123">123</a>.</span>
+        <span className="pie-enlaces"><a href="#/privacidad">Privacidad</a><a href="#/terminos">Términos</a></span>
       </footer>
     </div>
   );

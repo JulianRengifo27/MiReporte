@@ -11,6 +11,7 @@ import AlertasClima from '../components/AlertasClima.jsx';
 import AlertaProximidad, { mensajeProximidad } from '../components/AlertaProximidad.jsx';
 import FormularioReporte from '../components/FormularioReporte.jsx';
 import PanelRuta from '../components/PanelRuta.jsx';
+import { IconoRuta } from '../components/Iconos.jsx';
 import { calcularRutaSegura } from '../utils/rutas.js';
 
 export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
@@ -48,6 +49,20 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
       setRutaEstado('eligiendo');
     }
   }
+
+  // Si se llega desde el botón "Reportar emergencia" del inicio (#/mapa?reportar), abrir el formulario de una vez
+  // (también si ya estábamos en el mapa y cambia la dirección)
+  useEffect(() => {
+    const revisar = () => {
+      if (window.location.hash.includes('reportar')) {
+        setFormAbierto(true);
+        window.history.replaceState(null, '', '#/mapa');
+      }
+    };
+    revisar();
+    window.addEventListener('hashchange', revisar);
+    return () => window.removeEventListener('hashchange', revisar);
+  }, []);
 
   // Cargar emergencias de la API cuando ya sabemos dónde está el usuario
   const cargarEventos = useCallback(async (punto) => {
@@ -178,8 +193,8 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
 
       {/* Pestañas solo visibles en celular */}
       <div className="pestanas" role="tablist">
-        <button type="button" role="tab" aria-selected={vista === 'mapa'} onClick={() => setVista('mapa')}>🗺️ Mapa</button>
-        <button type="button" role="tab" aria-selected={vista === 'lista'} onClick={() => setVista('lista')}>📋 Lista ({conDistancia.length})</button>
+        <button type="button" role="tab" aria-selected={vista === 'mapa'} onClick={() => setVista('mapa')}>Mapa</button>
+        <button type="button" role="tab" aria-selected={vista === 'lista'} onClick={() => setVista('lista')}>Lista ({conDistancia.length})</button>
       </div>
 
       <main className={`principal vista-${vista}`}>
@@ -200,7 +215,7 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
           />
           {rutaEstado
             ? <PanelRuta estado={rutaEstado} resultado={ruta} error={errorRuta} onCerrar={cerrarRuta} onOtroDestino={empezarRuta} />
-            : <button type="button" className="boton-ruta-segura" onClick={empezarRuta}>🧭 Ruta segura</button>}
+            : <button type="button" className="boton-ruta-segura" onClick={empezarRuta}><IconoRuta tam={18} /> Ruta segura</button>}
           <div className="leyenda" aria-label="Leyenda de colores">
             {Object.values(TIPOS).map((t) => (
               <span key={t.etiqueta}><i style={{ background: t.color }} />{t.etiqueta}</span>

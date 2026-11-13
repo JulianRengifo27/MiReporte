@@ -2,12 +2,13 @@
 // El usuario toca el mapa para elegir su destino y la app calcula (con OSRM) una ruta que evita las emergencias.
 import { TIPOS } from '../config.js';
 import { formatoDistancia } from '../utils/geo.js';
+import { IconoRuta } from './Iconos.jsx';
 
 export default function PanelRuta({ estado, resultado, error, onCerrar, onOtroDestino }) {
   return (
     <div className="panel-ruta" role="region" aria-label="Ruta segura" aria-live="polite">
       <div className="panel-ruta-cabecera">
-        <strong>🧭 Ruta segura</strong>
+        <strong><IconoRuta tam={18} /> Ruta segura</strong>
         <button type="button" className="boton-icono" onClick={onCerrar} aria-label="Cerrar ruta segura">✕</button>
       </div>
 

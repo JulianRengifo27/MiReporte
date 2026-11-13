@@ -50,8 +50,8 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
 ## Estructura
 ```
 frontend/   React + Vite
-  src/pages/        Inicio (mapa), Ingresar, MisReportes, PanelOficial, PanelAdmin, Legal, Compartir
-  src/components/   Mapa, Feed, FormularioReporte, PanelRuta, AlertasClima, AlertaProximidad, ...
+  src/pages/        Bienvenida (inicio), Inicio (mapa), Ingresar, MisReportes, PanelOficial, PanelAdmin, Legal, Compartir
+  src/components/   Logo, Iconos, Mapa, Feed, FormularioReporte, PanelRuta, AlertasClima, ...
   src/utils/        geo.js (distancias), rutas.js (OSRM), voz.js
   public/           manifest.webmanifest, sw.js, íconos
   scripts/          generar-qr.mjs, generar-iconos.mjs

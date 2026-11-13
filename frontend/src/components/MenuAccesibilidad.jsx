@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IconoAccesible } from './Iconos.jsx';
 
 // Menú de accesibilidad (Ley 1618): tamaño de letra, alto contraste y lectura en voz alta
 export default function MenuAccesibilidad({ escala, setEscala, contraste, setContraste, onEscuchar }) {
@@ -14,7 +15,7 @@ export default function MenuAccesibilidad({ escala, setEscala, contraste, setCon
         aria-controls="panel-accesibilidad"
         aria-label="Menú de accesibilidad"
         onClick={() => setAbierto(!abierto)}
-      >♿</button>
+      ><IconoAccesible tam={22} /></button>
       {abierto && (
         <div id="panel-accesibilidad" className="panel-accesibilidad" role="group" aria-label="Opciones de accesibilidad">
           <p className="panel-titulo">Accesibilidad</p>
