@@ -1,4 +1,4 @@
-import { TIPOS, ESTADOS } from '../config.js';
+import { TIPOS, ESTADOS, PRIORIDADES, textoReportes } from '../config.js';
 import { formatoDistancia, formatoHora, formatoHace } from '../utils/geo.js';
 
 // Lista lateral de emergencias, ordenada por distancia al usuario
@@ -24,6 +24,10 @@ export default function Feed({ emergencias, seleccionada, onSeleccionar }) {
                   <span className="tarjeta-distancia">{formatoDistancia(e.distancia)}</span>
                 </span>
                 <span className="tarjeta-desc">{e.descripcion || 'Sin descripción.'}</span>
+                <span className="tarjeta-fila tarjeta-meta">
+                  {PRIORIDADES[e.prioridad] && <span className={`chip ${PRIORIDADES[e.prioridad].clase}`}>{PRIORIDADES[e.prioridad].etiqueta}</span>}
+                  <span>{textoReportes(e.cantidad_reportes || 1)}</span>
+                </span>
                 <span className="tarjeta-fila tarjeta-meta">
                   <span title={formatoHace(e.creado_en)}>🕒 {formatoHora(e.creado_en)}</span>
                   <span className={`chip ${ESTADOS[e.estado].clase}`}>{ESTADOS[e.estado].etiqueta}</span>

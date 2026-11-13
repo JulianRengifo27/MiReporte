@@ -264,3 +264,9 @@ button { font-family: inherit; font-size: 1rem; cursor: pointer; }
 }
 .aviso-error { background: #fde2e2; color: #8b0000; display: flex; gap: 0.6rem; align-items: center; justify-content: center; flex-wrap: wrap; }
 .boton:disabled { opacity: 0.6; cursor: wait; }
+
+/* ---- Prioridad (FASE 3) ---- */
+.prioridad-alta { background: #b71c1c; color: #fff; }
+.prioridad-media { background: #ffe0b2; color: #5d2e00; }
+.prioridad-baja { background: #e3f2fd; color: #0d47a1; }
+.popup-conteo { font-weight: 700; }

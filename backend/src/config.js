@@ -7,6 +7,9 @@ export const config = {
   databaseSsl: process.env.DATABASE_SSL === 'true',
   frontends: (process.env.FRONTEND_URL || 'http://localhost:5173').split(',').map((s) => s.trim()),
   carpetaFotos: process.env.UPLOAD_DIR || 'uploads',
+  // IA (opcional: sin llave se usan reglas de respaldo)
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  geminiModelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
   urlPublica: (process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`).replace(/\/$/, ''),
 };
 

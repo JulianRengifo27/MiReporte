@@ -23,3 +23,6 @@ INSERT INTO alertas_climaticas (titulo, descripcion, zona, nivel, recomendacione
   ARRAY['Limpia canales y desagües', 'No cruces corrientes de agua', 'Lleva sombrilla y sal con tiempo'], NOW() + INTERVAL '2 days'),
 ('Riesgo de deslizamientos en los cerros orientales', 'El suelo está saturado por las lluvias de los últimos días.', 'Cerros orientales', 'amarilla',
   ARRAY['Aléjate de laderas', 'Reporta grietas en muros o terreno'], NOW() + INTERVAL '3 days');
+
+-- Confianza inicial de los datos de prueba (FASE 3)
+UPDATE eventos SET confianza = CASE WHEN origen = 'oficial' THEN 100 ELSE LEAST(100, 40 + cantidad_reportes * 10) END;

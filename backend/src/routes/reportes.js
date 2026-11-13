@@ -5,6 +5,7 @@ import { pool } from '../db.js';
 import { subirFoto, guardarFoto } from '../services/almacenamiento.js';
 import { buscarPorId } from '../services/eventos.js';
 import { emitir } from '../socket.js';
+import { analizarReporte, buscarDuplicado, prioridadMayor, PARAMETROS } from '../services/ia.js';
 
 const router = Router();
 
@@ -41,34 +42,80 @@ router.post('/', limiteReportes, (req, res, next) => {
     const { datos, error } = validar(req.body);
     if (error) return res.status(400).json({ error });
 
-    const cliente = await pool.connect();
+    let cliente;
     try {
+      // Capas 2, 3 y 4 de la IA (texto, imagen, reglas). Se hace ANTES de abrir la
+      // transacción para no bloquear la base mientras Gemini responde.
+      const analisis = await analizarReporte({ tipo: datos.tipo, descripcion: datos.descripcion, foto: req.file });
       const foto_url = await guardarFoto(req.file);
       const punto = 'ST_MakePoint($2, $1)::geography'; // (lng, lat)
+      const resumenIA = { texto: analisis.texto, imagen: analisis.imagen, confianza: analisis.confianza };
 
+      cliente = await pool.connect();
       await cliente.query('BEGIN');
-      // FASE 2: cada reporte crea su propio evento.
-      // En la FASE 3 aquí entra la IA: unir duplicados, validar coherencia y asignar prioridad.
-      const { rows: [evento] } = await cliente.query(
-        `INSERT INTO eventos (tipo, descripcion, foto_url, ubicacion, radio_m, via_bloqueada)
-         VALUES ($3, $4, $5, ${punto}, $6, $7) RETURNING id`,
-        [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, TIPOS_CON_AREA[datos.tipo] || 0, TIPOS_QUE_BLOQUEAN.includes(datos.tipo)]
-      );
+
+      // Capa 1: ¿ya existe un evento igual cerca y reciente?
+      const duplicado = await buscarDuplicado(cliente, datos);
+      let eventoId, estadoAntes, estadoFinal, unido = false;
+
+      if (duplicado) {
+        // Unimos el reporte al evento existente: +1 reporte, más confianza
+        unido = true;
+        eventoId = duplicado.id;
+        estadoAntes = duplicado.estado;
+        const cantidad = duplicado.cantidad_reportes + 1;
+        const confianza = Math.min(100, duplicado.confianza + (analisis.estado === 'activa' ? 12 : 4));
+        // Un evento en revisión se publica si ya alcanzó la confianza o si varias personas lo confirman
+        estadoFinal = duplicado.estado === 'pendiente_revision' &&
+          (confianza >= PARAMETROS.umbralRevision || cantidad >= PARAMETROS.reportesParaPublicar)
+          ? 'activa' : duplicado.estado;
+        await cliente.query(
+          `UPDATE eventos
+              SET cantidad_reportes = $2, confianza = $3, estado = $4,
+                  prioridad = $5, foto_url = COALESCE(foto_url, $6),
+                  descripcion = COALESCE(descripcion, $7), actualizado_en = NOW()
+            WHERE id = $1`,
+          [eventoId, cantidad, confianza, estadoFinal, prioridadMayor(duplicado.prioridad, analisis.prioridad), foto_url, datos.descripcion]
+        );
+      } else {
+        // Evento nuevo con el resultado de la IA
+        estadoFinal = analisis.estado;
+        const { rows: [evento] } = await cliente.query(
+          `INSERT INTO eventos (tipo, descripcion, foto_url, ubicacion, radio_m, via_bloqueada, estado, prioridad, confianza, analisis_ia)
+           VALUES ($3, $4, $5, ${punto}, $6, $7, $8, $9, $10, $11) RETURNING id`,
+          [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, TIPOS_CON_AREA[datos.tipo] || 0,
+            TIPOS_QUE_BLOQUEAN.includes(datos.tipo), estadoFinal, analisis.prioridad, analisis.confianza, resumenIA]
+        );
+        eventoId = evento.id;
+      }
+
       const { rows: [reporte] } = await cliente.query(
-        `INSERT INTO reportes (tipo, descripcion, foto_url, ubicacion, evento_id)
-         VALUES ($3, $4, $5, ${punto}, $6) RETURNING id`,
-        [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, evento.id]
+        `INSERT INTO reportes (tipo, descripcion, foto_url, ubicacion, evento_id, estado, prioridad, confianza, analisis_ia)
+         VALUES ($3, $4, $5, ${punto}, $6, $7, $8, $9, $10) RETURNING id`,
+        [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, eventoId,
+          analisis.estado, analisis.prioridad, analisis.confianza, resumenIA]
       );
       await cliente.query('COMMIT');
 
-      const publico = await buscarPorId(evento.id);
-      emitir('nuevo_evento', publico); // ¡a todos los navegadores conectados!
-      res.status(201).json({ reporte_id: reporte.id, evento: publico });
+      // Tiempo real: solo se avisa de eventos públicos (los "en revisión" no salen en el mapa)
+      const publico = estadoFinal === 'pendiente_revision' ? null : await buscarPorId(eventoId);
+      if (publico) {
+        const eraPublico = unido && estadoAntes !== 'pendiente_revision';
+        emitir(eraPublico ? 'evento_actualizado' : 'nuevo_evento', publico);
+      }
+
+      res.status(201).json({
+        reporte_id: reporte.id,
+        unido_a_evento_existente: unido,
+        en_revision: estadoFinal === 'pendiente_revision',
+        prioridad: analisis.prioridad,
+        evento: publico,
+      });
     } catch (err) {
-      await cliente.query('ROLLBACK').catch(() => {});
+      await cliente?.query('ROLLBACK').catch(() => {});
       next(err);
     } finally {
-      cliente.release();
+      cliente?.release();
     }
   });
 });

@@ -25,6 +25,15 @@ export const TIPOS = {
 // Tipos que se dibujan como un área circular de riesgo (además del marcador)
 export const TIPOS_CON_AREA = ['inundacion', 'deslizamiento', 'incendio'];
 
+export const PRIORIDADES = {
+  alta:  { etiqueta: 'Prioridad alta',  clase: 'prioridad-alta' },
+  media: { etiqueta: 'Prioridad media', clase: 'prioridad-media' },
+  baja:  { etiqueta: 'Prioridad baja',  clase: 'prioridad-baja' },
+};
+
+// Texto "N personas reportaron esto"
+export const textoReportes = (n) => (n > 1 ? `👥 ${n} personas reportaron esto` : '👤 1 persona reportó esto');
+
 export const ESTADOS = {
   activa:      { etiqueta: 'Activa',      clase: 'estado-activa' },
   en_atencion: { etiqueta: 'En atención', clase: 'estado-atencion' },

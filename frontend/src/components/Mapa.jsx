@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import { ESTILO_OSM, escaparHTML } from '../utils/mapa.js';
-import { TIPOS, TIPOS_CON_AREA, ESTADOS } from '../config.js';
+import { TIPOS, TIPOS_CON_AREA, ESTADOS, PRIORIDADES, textoReportes } from '../config.js';
 import { circuloGeoJSON, formatoHora, formatoHace, linkRutaAlternativa } from '../utils/geo.js';
 
 // Contenido HTML del popup que aparece al tocar un marcador o un área
@@ -17,7 +17,8 @@ function htmlPopup(e, ubicacion) {
   return `
     <div class="popup">
       <div class="popup-titulo" style="--color:${t.color}">${t.icono} ${t.etiqueta}</div>
-      <div class="popup-chips"><span class="chip ${ESTADOS[e.estado].clase}">${ESTADOS[e.estado].etiqueta}</span>${sello}</div>
+      <div class="popup-chips"><span class="chip ${ESTADOS[e.estado].clase}">${ESTADOS[e.estado].etiqueta}</span>${PRIORIDADES[e.prioridad] ? `<span class="chip ${PRIORIDADES[e.prioridad].clase}">${PRIORIDADES[e.prioridad].etiqueta}</span>` : ''}${sello}</div>
+      <p class="popup-conteo">${textoReportes(e.cantidad_reportes || 1)}</p>
       <p>${escaparHTML(e.descripcion || 'Sin descripción.')}</p>
       ${e.foto_url ? `<img class="popup-foto" src="${escaparHTML(e.foto_url)}" alt="Foto del reporte" />` : ''}
       <p class="popup-hora">🕒 ${formatoHora(e.creado_en)} (${formatoHace(e.creado_en)})</p>

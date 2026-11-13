@@ -7,7 +7,7 @@ export const COLUMNAS_PUBLICAS = `
   e.id, e.tipo, e.descripcion, e.foto_url,
   ST_Y(e.ubicacion::geometry) AS lat, ST_X(e.ubicacion::geometry) AS lng,
   e.radio_m, e.estado, e.prioridad, e.origen, e.verificado, e.entidad,
-  e.via_bloqueada, e.desvio, e.cantidad_reportes, e.creado_en, e.actualizado_en`;
+  e.via_bloqueada, e.desvio, e.cantidad_reportes, e.confianza, e.creado_en, e.actualizado_en`;
 
 // Estados que se muestran en el mapa público
 const ESTADOS_PUBLICOS = ['activa', 'en_atencion', 'resuelta'];

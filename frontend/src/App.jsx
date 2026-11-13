@@ -118,14 +118,22 @@ export default function App() {
 
   // Nuevo reporte: se envía a la API. Si falla, el formulario muestra el error.
   async function enviarReporte(datos) {
-    const { evento: nueva } = await crearReporte(datos);
-    // Lo agregamos de una vez (el socket también lo traerá; no se duplica porque se reemplaza por id)
-    setEmergencias((lista) => [nueva, ...lista.filter((x) => x.id !== nueva.id)]);
+    const r = await crearReporte(datos);
     setFormAbierto(false);
-    setSeleccionada(nueva.id);
-    setVista('mapa');
-    setConfirmacion('✅ ¡Gracias! Tu reporte ya aparece en el mapa.');
-    setTimeout(() => setConfirmacion(''), 4000);
+    if (r.en_revision || !r.evento) {
+      // La IA lo marcó como dudoso: no sale en el mapa hasta que lo revise un administrador
+      setConfirmacion('🕵️ Gracias. Tu reporte quedó en revisión antes de publicarse.');
+    } else {
+      const nueva = r.evento;
+      // Lo agregamos de una vez (el socket también lo traerá; no se duplica porque se reemplaza por id)
+      setEmergencias((lista) => [nueva, ...lista.filter((x) => x.id !== nueva.id)]);
+      setSeleccionada(nueva.id);
+      setVista('mapa');
+      setConfirmacion(r.unido_a_evento_existente
+        ? `✅ ¡Gracias! Ya estaba reportado: ahora ${nueva.cantidad_reportes} personas lo confirman.`
+        : '✅ ¡Gracias! Tu reporte ya aparece en el mapa.');
+    }
+    setTimeout(() => setConfirmacion(''), 5000);
   }
 
   return (
