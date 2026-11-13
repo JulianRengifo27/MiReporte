@@ -10,6 +10,8 @@ import Feed from '../components/Feed.jsx';
 import AlertasClima from '../components/AlertasClima.jsx';
 import AlertaProximidad, { mensajeProximidad } from '../components/AlertaProximidad.jsx';
 import FormularioReporte from '../components/FormularioReporte.jsx';
+import PanelRuta from '../components/PanelRuta.jsx';
+import { calcularRutaSegura } from '../utils/rutas.js';
 
 export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
   const { usuario } = useSesion();
@@ -23,6 +25,29 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
   const [vista, setVista] = useState('mapa'); // en celular: 'mapa' o 'lista'
   const [confirmacion, setConfirmacion] = useState('');
   const [zonasAvisadas, setZonasAvisadas] = useState([]);
+  // Ruta segura (OSRM): null | 'eligiendo' | 'calculando' | 'lista'
+  const [rutaEstado, setRutaEstado] = useState(null);
+  const [destino, setDestino] = useState(null);
+  const [ruta, setRuta] = useState(null);
+  const [errorRuta, setErrorRuta] = useState('');
+
+  function empezarRuta() {
+    setRutaEstado('eligiendo'); setDestino(null); setRuta(null); setErrorRuta('');
+    setSeleccionada(null); setVista('mapa');
+  }
+  function cerrarRuta() {
+    setRutaEstado(null); setDestino(null); setRuta(null); setErrorRuta('');
+  }
+  async function elegirDestino(punto) {
+    setDestino(punto); setRutaEstado('calculando'); setErrorRuta('');
+    try {
+      setRuta(await calcularRutaSegura(ubicacion, punto, emergencias));
+      setRutaEstado('lista');
+    } catch (err) {
+      setErrorRuta(err.message);
+      setRutaEstado('eligiendo');
+    }
+  }
 
   // Cargar emergencias de la API cuando ya sabemos dónde está el usuario
   const cargarEventos = useCallback(async (punto) => {
@@ -167,7 +192,15 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
           />
         </aside>
         <section className="zona-mapa">
-          <Mapa emergencias={conDistancia} ubicacion={ubicacion} seleccionada={seleccionada} onSeleccionar={setSeleccionada} />
+          <Mapa
+            emergencias={conDistancia} ubicacion={ubicacion}
+            seleccionada={seleccionada} onSeleccionar={setSeleccionada}
+            ruta={ruta} destino={destino}
+            eligiendoDestino={rutaEstado === 'eligiendo'} onElegirDestino={elegirDestino}
+          />
+          {rutaEstado
+            ? <PanelRuta estado={rutaEstado} resultado={ruta} error={errorRuta} onCerrar={cerrarRuta} onOtroDestino={empezarRuta} />
+            : <button type="button" className="boton-ruta-segura" onClick={empezarRuta}>🧭 Ruta segura</button>}
           <div className="leyenda" aria-label="Leyenda de colores">
             {Object.values(TIPOS).map((t) => (
               <span key={t.etiqueta}><i style={{ background: t.color }} />{t.etiqueta}</span>

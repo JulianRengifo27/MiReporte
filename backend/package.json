@@ -9,7 +9,8 @@
     "start": "node src/server.js",
     "migrar": "node scripts/migrar.js",
     "seed": "node scripts/seed.js",
-    "db:reset": "node scripts/migrar.js --reset && node scripts/seed.js"
+    "db:reset": "node scripts/migrar.js --reset && node scripts/seed.js",
+    "demo": "node scripts/seed.js && node scripts/demo.js"
   },
   "engines": {
     "node": ">=20"

@@ -4,3 +4,5 @@ dist/
 *.log
 .DS_Store
 uploads/
+qr-mireporte.png
+qr-mireporte.svg

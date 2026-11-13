@@ -12,6 +12,7 @@ import MisReportes from './pages/MisReportes.jsx';
 import PanelOficial from './pages/PanelOficial.jsx';
 import PanelAdmin from './pages/PanelAdmin.jsx';
 import { Privacidad, Terminos } from './pages/Legal.jsx';
+import Compartir from './pages/Compartir.jsx';
 
 const AVISO_123 = 'Esta plataforma no reemplaza la línea 123. En una emergencia, llama al 123.';
 
@@ -45,6 +46,7 @@ export default function App() {
     case '/admin': pagina = protegida('revisar_reportes', <PanelAdmin />); break;
     case '/privacidad': pagina = <Privacidad />; break;
     case '/terminos': pagina = <Terminos />; break;
+    case '/compartir': pagina = <Compartir />; break;
     default: pagina = <Inicio ubicacion={ubicacion} estadoGPS={estadoGPS} registrarEscuchar={setEscucharPagina} />;
   }
 
@@ -74,6 +76,7 @@ export default function App() {
         {usuario && tiene('ver_mis_reportes') && enlace('/mis-reportes', '📋 Mis reportes')}
         {tiene('publicar_oficial') && enlace('/oficial', '🛡️ Panel oficial')}
         {tiene('revisar_reportes') && enlace('/admin', '⚙️ Administración')}
+        {enlace('/compartir', '📲 Compartir')}
         {usuario
           ? <button type="button" onClick={() => { salir(); window.location.hash = '/'; }}>Salir ({usuario.nombre.split(' ')[0]})</button>
           : enlace('/ingresar', '👤 Ingresar')}

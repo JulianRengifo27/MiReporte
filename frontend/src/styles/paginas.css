@@ -92,3 +92,27 @@
 .columna-barra { width: 100%; background: var(--rojo); border-radius: 4px 4px 0 0; min-height: 2px; }
 .columna-valor { font-size: 0.75rem; font-weight: 700; }
 .columna-dia { font-size: 0.7rem; color: var(--texto-suave); }
+
+/* ===== Ruta segura (FASE 5) ===== */
+.boton-ruta-segura {
+  position: absolute; top: 0.7rem; left: 0.7rem; z-index: 3; min-height: 48px; padding: 0 1rem;
+  border: none; border-radius: 999px; background: #2e7d32; color: #fff; font-weight: 900; box-shadow: var(--sombra);
+}
+:root.alto-contraste .boton-ruta-segura { border: 2px solid #fff; background: #000; }
+.panel-ruta {
+  position: absolute; top: 0.7rem; left: 0.7rem; right: 3.6rem; z-index: 3; max-width: 380px;
+  background: var(--superficie); color: var(--texto); border-radius: var(--radio); box-shadow: var(--sombra);
+  padding: 0.6rem 0.9rem 0.8rem; border-top: 6px solid #2e7d32;
+}
+.panel-ruta p { margin: 0.4rem 0; }
+.panel-ruta-cabecera { display: flex; justify-content: space-between; align-items: center; }
+.panel-ruta-cabecera .boton-icono { background: var(--rojo-claro); color: var(--texto); min-width: 40px; min-height: 40px; font-size: 1rem; }
+.panel-ruta-datos { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-weight: 700; }
+.marcador-destino { font-size: 2rem; line-height: 1; filter: drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
+
+/* ===== Compartir / QR ===== */
+.compartir { text-align: center; }
+.qr { width: min(320px, 100%); height: auto; border-radius: var(--radio); box-shadow: var(--sombra); background: #fff; }
+.url-compartir { font-weight: 700; word-break: break-all; }
+.acciones-centradas { justify-content: center; }
+.pasos { text-align: left; line-height: 1.6; }
