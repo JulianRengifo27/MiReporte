@@ -21,7 +21,7 @@ export default function AlertaProximidad({ emergencia, onCerrar, onVer, onEscuch
     <div className="modal-fondo" role="alertdialog" aria-modal="true" aria-labelledby="prox-titulo" aria-describedby="prox-texto">
       <div className="modal modal-alerta" style={{ '--color': t.color }}>
         <div className="modal-alerta-icono" aria-hidden="true">{t.icono}</div>
-        <h2 id="prox-titulo">¡Pilas! Zona de riesgo cerca</h2>
+        <h2 id="prox-titulo">¡Atención! Zona de riesgo cerca</h2>
         <p id="prox-texto">{mensajeProximidad(emergencia)}</p>
         <div className="modal-acciones">
           <button type="button" className="boton boton-secundario" onClick={() => onEscuchar(mensajeProximidad(emergencia))}>🔊 Escuchar</button>

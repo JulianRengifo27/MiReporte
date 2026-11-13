@@ -1,0 +1,94 @@
+/* ===== Estilos de la FASE 4: navegación, páginas, paneles ===== */
+
+.marca { color: inherit; text-decoration: none; }
+
+/* Menú principal (inspirado en la barra de navegación del index.html original) */
+.navegacion {
+  display: flex; gap: 0.2rem; overflow-x: auto; background: var(--rojo-oscuro); padding: 0 0.5rem;
+  scrollbar-width: none;
+}
+.navegacion a, .navegacion button {
+  flex-shrink: 0; display: flex; align-items: center; min-height: 44px; padding: 0 0.9rem;
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem;
+  background: none; border: none; border-bottom: 3px solid transparent; white-space: nowrap;
+}
+.navegacion a[aria-current='page'] { border-bottom-color: #fff; }
+.navegacion a:hover, .navegacion button:hover { background: rgba(255, 255, 255, 0.12); }
+.navegacion button { margin-left: auto; }
+
+/* La página del mapa ocupa toda la pantalla; las demás hacen scroll normal */
+.app-pagina { height: auto; min-height: 100dvh; }
+.app-pagina .pie { margin-top: auto; }
+.app-pagina .boton-reportar-flotante { display: none; }
+
+.pie { display: flex; flex-direction: column; gap: 0.2rem; align-items: center; }
+.pie-enlaces a { color: #fff; font-weight: 400; }
+
+.pagina { width: 100%; max-width: 1100px; margin: 0 auto; padding: 1.2rem 1rem 3rem; }
+.pagina h2 { margin-top: 0; }
+.pagina-angosta { max-width: 460px; }
+.pagina-texto { max-width: 780px; line-height: 1.6; }
+.nota { color: var(--texto-suave); font-size: 0.9rem; }
+.exito { color: var(--ok); font-weight: 700; }
+.aviso-destacado { background: #fff3cd; color: #4d3800; padding: 0.8rem 1rem; border-radius: var(--radio); border-left: 6px solid #ff9800; }
+:root.alto-contraste .aviso-destacado { background: #000; color: #ffff00; border: 2px solid #fff; }
+
+/* Formularios genéricos */
+.formulario { display: flex; flex-direction: column; gap: 0.9rem; }
+.campo input, .campo select {
+  min-height: 48px; padding: 0.5rem 0.7rem; font-family: inherit; font-size: 1rem;
+  border: 2px solid var(--borde); border-radius: var(--radio); background: var(--superficie); color: var(--texto);
+}
+.fila-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.8rem; }
+.fila-centrada { align-items: end; }
+.casilla { display: flex; gap: 0.6rem; align-items: center; min-height: 44px; }
+.casilla input { width: 22px; height: 22px; accent-color: var(--rojo); }
+.boton-enlace { background: none; border: none; color: var(--rojo); font-weight: 700; text-decoration: underline; padding: 1rem 0; min-height: 44px; }
+.boton-chico { min-height: 40px; padding: 0.3rem 0.6rem; }
+
+/* Pestañas de los paneles */
+.pestanas-panel { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 1rem 0; }
+.pestanas-panel button {
+  min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 2px solid var(--borde);
+  background: var(--superficie); color: var(--texto); font-weight: 700;
+}
+.pestanas-panel button[aria-selected='true'] { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+
+/* Listas de tarjetas en paneles */
+.lista-simple { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.tarjeta-gestion { cursor: default; }
+.tarjeta-desc-completa { margin: 0.2rem 0; color: var(--texto); }
+.acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.fila-desvio { display: flex; gap: 0.5rem; align-items: end; margin-top: 0.6rem; flex-wrap: wrap; }
+.fila-desvio .campo { flex: 1; min-width: 220px; }
+.caja-ia {
+  display: flex; flex-direction: column; gap: 0.2rem; margin: 0.5rem 0; padding: 0.6rem 0.8rem;
+  background: #eef2ff; color: #1a237e; border-radius: 10px; font-size: 0.88rem;
+}
+:root.alto-contraste .caja-ia { background: #000; color: #fff; border: 1px solid #fff; }
+.caja-plegable { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 0.8rem 1rem; margin-bottom: 1rem; }
+.caja-plegable summary { font-weight: 700; cursor: pointer; min-height: 32px; }
+.caja-plegable[open] summary { margin-bottom: 0.8rem; }
+
+/* Tablas */
+.tabla-scroll { overflow-x: auto; }
+.tabla { width: 100%; border-collapse: collapse; background: var(--superficie); font-size: 0.9rem; }
+.tabla th, .tabla td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--borde); text-align: left; white-space: nowrap; }
+.tabla th { background: var(--rojo-claro); color: var(--texto); }
+.tabla select { min-height: 40px; font-family: inherit; }
+.fila-inactiva { opacity: 0.5; }
+
+/* Estadísticas */
+.tarjetas-numero { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.7rem; margin-bottom: 1.5rem; }
+.tarjetas-numero div { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 1rem; display: flex; flex-direction: column; }
+.tarjetas-numero strong { font-size: 2rem; color: var(--rojo); }
+.barras { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.barras li { display: grid; grid-template-columns: 130px 1fr 40px; align-items: center; gap: 0.6rem; }
+.barra-pista { background: var(--borde); border-radius: 6px; height: 18px; overflow: hidden; }
+.barra { display: block; height: 100%; border-radius: 6px; }
+.barra-valor { font-weight: 700; text-align: right; }
+.columnas { display: flex; align-items: flex-end; gap: 4px; height: 180px; padding-top: 1.2rem; }
+.columna { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.columna-barra { width: 100%; background: var(--rojo); border-radius: 4px 4px 0 0; min-height: 2px; }
+.columna-valor { font-size: 0.75rem; font-weight: 700; }
+.columna-dia { font-size: 0.7rem; color: var(--texto-suave); }

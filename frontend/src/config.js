@@ -1,6 +1,6 @@
 // ===== Configuración general de la app =====
 // Cambia aquí el nombre y todo el sitio se actualiza.
-export const APP_NAME = 'Pilas';
+export const APP_NAME = 'MiReporte';
 export const APP_LEMA = 'Emergencias urbanas en tiempo real';
 
 // Si el usuario niega el GPS, centramos el mapa en Bogotá (Plaza de Bolívar)

@@ -13,6 +13,17 @@ export const config = {
   urlPublica: (process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`).replace(/\/$/, ''),
 };
 
+// Seguridad (FASE 4)
+config.jwtSecret = process.env.JWT_SECRET || '';
+config.jwtDuracion = process.env.JWT_DURACION || '8h';
+// Eventos sin actividad por estas horas pasan a "Resuelta" automáticamente
+config.horasCierreAutomatico = Number(process.env.CIERRE_AUTOMATICO_HORAS) || 6;
+
+if (!config.jwtSecret || config.jwtSecret.length < 32) {
+  console.error('❌ Falta JWT_SECRET en el .env (mínimo 32 caracteres). Mira .env.example.');
+  process.exit(1);
+}
+
 if (!config.databaseUrl) {
   console.error('❌ Falta DATABASE_URL en el archivo .env (mira .env.example).');
   process.exit(1);

@@ -5,6 +5,7 @@ import { pool } from '../db.js';
 import { subirFoto, guardarFoto } from '../services/almacenamiento.js';
 import { buscarPorId } from '../services/eventos.js';
 import { emitir } from '../socket.js';
+import { limpiarTexto } from '../utils/validacion.js';
 import { analizarReporte, buscarDuplicado, prioridadMayor, PARAMETROS } from '../services/ia.js';
 
 const router = Router();
@@ -27,7 +28,7 @@ function validar(cuerpo) {
   const tipo = String(cuerpo.tipo || '').trim();
   const lat = Number(cuerpo.lat);
   const lng = Number(cuerpo.lng);
-  const descripcion = String(cuerpo.descripcion || '').trim().slice(0, 280);
+  const descripcion = limpiarTexto(cuerpo.descripcion, 280);
   if (!TIPOS.includes(tipo)) return { error: 'Tipo de emergencia no válido.' };
   if (!Number.isFinite(lat) || lat < -90 || lat > 90) return { error: 'Latitud no válida.' };
   if (!Number.isFinite(lng) || lng < -180 || lng > 180) return { error: 'Longitud no válida.' };
@@ -90,10 +91,12 @@ router.post('/', limiteReportes, (req, res, next) => {
       }
 
       const { rows: [reporte] } = await cliente.query(
-        `INSERT INTO reportes (tipo, descripcion, foto_url, ubicacion, evento_id, estado, prioridad, confianza, analisis_ia)
-         VALUES ($3, $4, $5, ${punto}, $6, $7, $8, $9, $10) RETURNING id`,
+        `INSERT INTO reportes (tipo, descripcion, foto_url, ubicacion, evento_id, estado, prioridad, confianza, analisis_ia, usuario_id)
+         VALUES ($3, $4, $5, ${punto}, $6, $7, $8, $9, $10, $11) RETURNING id`,
         [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, eventoId,
-          analisis.estado, analisis.prioridad, analisis.confianza, resumenIA]
+          analisis.estado, analisis.prioridad, analisis.confianza, resumenIA,
+          // Si el ciudadano inició sesión, el reporte queda en SU historial (nunca se muestra públicamente)
+          req.usuario?.id || null]
       );
       await cliente.query('COMMIT');
 
