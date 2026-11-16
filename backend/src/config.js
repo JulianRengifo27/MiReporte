@@ -12,8 +12,8 @@ export const config = {
   // IA (opcional: sin llave se usan reglas de respaldo)
   geminiApiKey: process.env.GEMINI_API_KEY || '',
   geminiModelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-  // En Render, RENDER_EXTERNAL_URL trae la dirección pública automáticamente
-  urlPublica: (process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 3000}`).replace(/\/$/, ''),
+  // Dirección pública del backend (en Railway: https://${{RAILWAY_PUBLIC_DOMAIN}})
+  urlPublica: (process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 3000}`).replace(/\/$/, ''),
 };
 
 // Seguridad (FASE 4)

@@ -4,6 +4,8 @@ Plataforma web **gratuita, sin descargas y sin registro obligatorio** para repor
 
 **Equipo:** Julian Rengifo Forero, José Giraldo Sarmiento, Johan Wilches Olarte, Valerie Rincón Zuluaga y Daniel Galindo Madero.
 
+🌐 **Página:** https://mi-reporte.vercel.app · **API:** https://mireporte-production.up.railway.app/api/salud
+
 > ⚠️ Esta plataforma no reemplaza la línea 123. En una emergencia, llama al 123.
 
 ## El problema y la solución
@@ -33,7 +35,7 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
               REST (HTTPS)   │               │  WebSocket (Socket.IO)
                              ▼               ▼
                       ┌──────────────────────────────┐      ┌─────────────────────┐
-                      │  Backend (Render)            │ ───▶ │ Google Gemini (IA)  │
+                      │  Backend (Railway)           │ ───▶ │ Google Gemini (IA)  │
                       │  Node.js + Express           │      └─────────────────────┘
                       │  JWT · helmet · rate limit   │
                       │  services/ia.js · cierre     │      ┌─────────────────────┐
@@ -41,7 +43,7 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
                              ▼                              └─────────────────────┘
                ┌───────────────────┐                        ┌─────────────────────┐
                │ PostgreSQL+PostGIS│                        │ OpenStreetMap tiles │◀── el frontend
-               │ + fotos  (Neon)   │                        └─────────────────────┘
+               │ + fotos (Railway) │                        └─────────────────────┘
                └───────────────────┘
 ```
 
@@ -59,14 +61,15 @@ backend/    Node.js + Express
   src/routes/       reportes, eventos, alertas, auth, misReportes, oficial, admin
   src/services/     ia.js, eventos.js, almacenamiento.js, cierre.js
   src/middleware/   auth.js (JWT + permisos)
-  db/migraciones/   001 inicial, 002 IA, 003 roles y permisos
+  db/migraciones/   001 inicial, 002 IA, 003 roles y permisos, 004 fotos en la base de datos
   db/seed.sql · db/demo.sql
 legacy/     primera versión en HTML/CSS (referencia)
-DESPLIEGUE.md   guía paso a paso para publicar gratis en Neon, Render y Vercel
+DESPLIEGUE.md   guía paso a paso para publicar en Railway y Vercel
+GUION_PRESENTACION.md   guion de la presentación para 3 personas
 ```
 
 ## Tecnologías
-React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Neon · Render · Vercel · PWA (service worker) · qrcode
+React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Railway · Vercel · GitHub · PWA (service worker) · qrcode
 
 Cambiar el nombre de la app: `frontend/src/config.js` → `APP_NAME`.
 
@@ -98,7 +101,7 @@ npm run qr -- https://tu-app.vercel.app   # genera qr-mireporte.png
 ```
 
 ## Publicar en internet
-Sigue [DESPLIEGUE.md](DESPLIEGUE.md): base de datos en **Neon**, backend en **Render** y frontend en **Vercel** (todo con planes gratuitos).
+Sigue [DESPLIEGUE.md](DESPLIEGUE.md): backend + PostgreSQL/PostGIS en **Railway** y frontend en **Vercel**.
 
 ### Cuentas de prueba (solo desarrollo)
 Las crea `npm run seed`. **Cámbienlas (variables `SEED_PASSWORD_*`) antes de desplegar.**

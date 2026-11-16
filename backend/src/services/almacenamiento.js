@@ -1,7 +1,7 @@
 // ===== Guardado de fotos =====
 // Dos modos (variable FOTOS_EN en el .env):
 //   · "bd"    (por defecto) → la foto se guarda en PostgreSQL, tabla "fotos". Ideal para hostings
-//                             gratuitos como Render, que borran los archivos al reiniciarse.
+//                             en la nube (Railway, Render...), que borran los archivos al reiniciarse.
 //   · "disco"               → la foto se guarda en la carpeta UPLOAD_DIR (útil con un volumen).
 // El resto del código solo usa la URL que devuelve guardarFoto(), así que cambiar de modo
 // (o pasar a S3/Cloudinary en el futuro) no afecta nada más.
