@@ -34,7 +34,7 @@ export function Privacidad() {
         <li><strong>Nunca mostramos públicamente quién hizo un reporte.</strong> El mapa solo muestra la emergencia.</li>
         <li>Si envías una foto, esta puede verse en el mapa. <strong>Evita fotografiar rostros o placas</strong> de vehículos.</li>
         <li>La descripción y la foto se envían a Google Gemini para su análisis automático; no se envían datos de tu cuenta.</li>
-        <li>Si usas <strong>Ruta segura</strong>, tu ubicación y el destino se envían al servicio de rutas OSRM (OpenStreetMap) solo para calcular el camino; no se guardan en {APP_NAME}.</li>
+        <li>Si usas <strong>Ruta segura</strong>, tu ubicación y el destino se envían al servicio de rutas OSRM (OpenStreetMap) solo para calcular el camino, y lo que escribes en el buscador de direcciones se envía a Photon (OpenStreetMap) para encontrar el lugar. Nada de esto se guarda en {APP_NAME}.</li>
         <li>No vendemos ni compartimos tus datos con terceros para publicidad.</li>
       </ul>
 

@@ -17,7 +17,7 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
 | **RF01** Reportar | Botón flotante → tipo, pin GPS ajustable, descripción y foto. 3 toques. Sin cuenta. |
 | **RF02** Mapa en tiempo real | MapLibre + OpenStreetMap, íconos y colores por tipo, áreas circulares de riesgo, Socket.IO |
 | **RF03** Integración oficial | Panel oficial: reportes con sello "✔ Verificado" que toman el control de los eventos ciudadanos |
-| **RF04** Rutas alternativas | Desvío escrito por la entidad + **🧭 Ruta segura** (OSRM) que calcula y dibuja una ruta que esquiva las emergencias, con link a Google Maps |
+| **RF04** Rutas alternativas | Desvío escrito por la entidad + **🧭 Ruta segura**: escribes a dónde vas (buscador Photon/OSM) o tocas el mapa, y OSRM calcula y dibuja una ruta que esquiva las emergencias reportadas, con link a Google Maps |
 | **RF05** IA | Duplicados con PostGIS (200 m / 60 min), Gemini para texto e imagen, confianza 0–100, prioridad Alta/Media/Baja, cola de revisión |
 | **RNF01** ≤ 5 s | Socket.IO empuja cada evento nuevo; la IA tiene un límite de 4 s y reglas de respaldo |
 | **RNF02** Escalable | API sin estado (JWT), pool de conexiones, índices espaciales GIST, fotos listas para pasar a la nube |
@@ -69,7 +69,7 @@ GUION_PRESENTACION.md   guion de la presentación para 3 personas
 ```
 
 ## Tecnologías
-React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Railway · Vercel · GitHub · PWA (service worker) · qrcode
+React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Photon · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Railway · Vercel · GitHub · PWA (service worker) · qrcode
 
 Cambiar el nombre de la app: `frontend/src/config.js` → `APP_NAME`.
 

@@ -151,7 +151,15 @@ export default function Mapa({ emergencias, ubicacion, seleccionada, onSeleccion
     const c = ruta.mejor.geometry.coordinates;
     const limites = c.reduce((b, p) => b.extend(p), new maplibregl.LngLatBounds(c[0], c[0]));
     usuarioMovioMapa.current = true;
-    mapa.current.fitBounds(limites, { padding: { top: 230, bottom: 60, left: 60, right: 60 }, maxZoom: 16 });
+    // Dejar libre el espacio que ocupa el panel de Ruta segura para que no tape la ruta:
+    // en pantallas anchas el panel está a la izquierda; en celular, arriba.
+    const ancho = contenedor.current.clientWidth;
+    const alto = contenedor.current.clientHeight;
+    const panel = contenedor.current.parentElement?.querySelector('.panel-ruta');
+    const padding = ancho >= 700
+      ? { top: 50, bottom: 50, right: 60, left: Math.min((panel?.offsetWidth || 360) + 40, ancho * 0.6) }
+      : { top: Math.min((panel?.offsetHeight || 300) + 30, alto * 0.6), bottom: 40, left: 30, right: 30 };
+    mapa.current.fitBounds(limites, { padding, maxZoom: 16 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ruta]);
 

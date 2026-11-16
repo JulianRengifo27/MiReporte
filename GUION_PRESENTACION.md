@@ -107,12 +107,16 @@
 > *"Y si Gemini falla o se cae, tenemos **reglas de respaldo**: la app nunca deja de funcionar."*
 
 ### 2.4 Demo: Ruta segura (1 min)
-🖱️ *En el computador: clic en **Ruta segura** (botón arriba a la izquierda del mapa) y tocar un destino al **otro lado** de alguna emergencia.*
+🖱️ *En el computador: clic en **Ruta segura** (botón arriba a la izquierda del mapa). En **"¿A dónde vas?"** escribir `Estadio El Campin` y elegir la primera sugerencia.*
 
-> *"Si una emergencia bloquea una vía, **Ruta segura** calcula un camino que la **esquiva**. Pedimos varias rutas, descartamos las que pasan por zonas afectadas y dibujamos en **verde** la más segura. En rojo punteado quedan las que descartamos."*
+> *"Escribo a dónde voy —una dirección o un lugar— y la app lo encuentra. También puedo tocar el destino directamente en el mapa."*
 
-🖱️ *Señalar los datos: distancia, minutos extra. Clic en **Abrir en Google Maps**.*
+> *"Si una emergencia bloquea una vía, **Ruta segura** calcula un camino que la **esquiva**. Pedimos varias rutas, descartamos las que pasan por emergencias reportadas y dibujamos en **verde** la que las evita y es más rápida. En rojo punteado quedan las que descartamos."*
+
+🖱️ *Señalar los datos: distancia, tiempo, minutos extra por el desvío y "esquiva 1". Clic en **Abrir en Google Maps**.*
 > *"Y con un toque la abres en Google Maps para que te guíe."*
+
+> ⚠️ *Decirlo con precisión:* *"Es la ruta más rápida que **evita las emergencias reportadas en MiReporte**. No conoce accidentes que nadie haya reportado ni el tráfico en tiempo real; por eso es una recomendación."* (No decir "la mejor vía sin accidentes".)
 
 🛟 *Si la ruta no calcula (el servidor de rutas está saturado): esperar 5 segundos y repetir. Si sigue fallando, mostrar el botón **Ver ruta alternativa** dentro de un popup y explicar que el desvío también lo escriben las entidades.*
 
@@ -183,6 +187,7 @@
 | ¿Por qué web y no una app de celular? | Persona 1 | Sin descargas: cualquiera la abre con un link o un QR, en cualquier celular. Y aun así se puede instalar. |
 | ¿Qué datos personales guardan? | Persona 3 | Si reportas sin cuenta, solo el reporte. Si te registras: nombre, correo y contraseña cifrada. Nunca se muestran. |
 | ¿Funciona fuera de Bogotá? | Persona 2 | Sí: el mapa se centra donde estés. Bogotá es solo el punto por defecto y donde están los datos de demostración. |
+| ¿La ruta segura es la mejor vía sin accidentes? | Persona 2 | Es la más rápida que evita las emergencias **reportadas en la plataforma**. No ve tráfico en tiempo real ni lo que nadie reportó; Google Maps complementa eso. |
 | ¿Por qué tarda la primera vez? | Persona 3 | Si el servidor estuvo un rato sin uso puede tardar unos segundos en arrancar; luego responde al instante. |
 
 ---

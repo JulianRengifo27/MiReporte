@@ -31,16 +31,18 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
   const [destino, setDestino] = useState(null);
   const [ruta, setRuta] = useState(null);
   const [errorRuta, setErrorRuta] = useState('');
+  const [nombreDestino, setNombreDestino] = useState('');
 
   function empezarRuta() {
-    setRutaEstado('eligiendo'); setDestino(null); setRuta(null); setErrorRuta('');
+    setRutaEstado('eligiendo'); setDestino(null); setRuta(null); setErrorRuta(''); setNombreDestino('');
     setSeleccionada(null); setVista('mapa');
   }
   function cerrarRuta() {
-    setRutaEstado(null); setDestino(null); setRuta(null); setErrorRuta('');
+    setRutaEstado(null); setDestino(null); setRuta(null); setErrorRuta(''); setNombreDestino('');
   }
-  async function elegirDestino(punto) {
-    setDestino(punto); setRutaEstado('calculando'); setErrorRuta('');
+  // El destino llega del buscador de direcciones (con nombre) o de tocar el mapa (sin nombre)
+  async function elegirDestino(punto, nombre = '') {
+    setDestino(punto); setNombreDestino(nombre); setRutaEstado('calculando'); setErrorRuta('');
     try {
       setRuta(await calcularRutaSegura(ubicacion, punto, emergencias));
       setRutaEstado('lista');
@@ -214,7 +216,11 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
             eligiendoDestino={rutaEstado === 'eligiendo'} onElegirDestino={elegirDestino}
           />
           {rutaEstado
-            ? <PanelRuta estado={rutaEstado} resultado={ruta} error={errorRuta} onCerrar={cerrarRuta} onOtroDestino={empezarRuta} />
+            ? <PanelRuta
+                estado={rutaEstado} resultado={ruta} error={errorRuta}
+                ubicacion={ubicacion} nombreDestino={nombreDestino} onElegirDestino={elegirDestino}
+                onCerrar={cerrarRuta} onOtroDestino={empezarRuta}
+              />
             : <button type="button" className="boton-ruta-segura" onClick={empezarRuta}><IconoRuta tam={18} /> Ruta segura</button>}
           <div className="leyenda" aria-label="Leyenda de colores">
             {Object.values(TIPOS).map((t) => (
