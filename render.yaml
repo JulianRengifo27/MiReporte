@@ -1,0 +1,36 @@
+# ===== Configuración de Render (backend de MiReporte) =====
+# Render lee este archivo con "New → Blueprint". La base de datos está en Neon (no en Render).
+# Las variables con "sync: false" son secretas: Render te pide su valor al crear el servicio.
+services:
+  - type: web
+    name: mireporte-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: npm ci
+    # En el plan gratis no hay "pre-deploy": las migraciones se aplican al arrancar
+    startCommand: npm run migrar && npm start
+    healthCheckPath: /api/salud
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_DURACION
+        value: 8h
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: FOTOS_EN
+        value: bd
+      - key: FRONTEND_URL
+        sync: false
+      - key: CIERRE_AUTOMATICO_HORAS
+        value: "72"

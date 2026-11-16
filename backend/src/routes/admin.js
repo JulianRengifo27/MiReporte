@@ -91,6 +91,11 @@ router.delete('/eventos-viejos', requierePermiso('eliminar_eventos'), async (req
       [dias]
     );
     rows.forEach(({ id }) => emitir('evento_eliminado', { id }));
+    // Borra también las fotos que ya no usa ningún evento ni reporte (libera espacio en la base)
+    await query(
+      `DELETE FROM fotos f WHERE NOT EXISTS (SELECT 1 FROM eventos e WHERE e.foto_url LIKE '%' || f.id::text)
+          AND NOT EXISTS (SELECT 1 FROM reportes r WHERE r.foto_url LIKE '%' || f.id::text)`
+    );
     res.json({ eliminados: rows.length });
   } catch (err) { next(err); }
 });

@@ -33,16 +33,16 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
               REST (HTTPS)   │               │  WebSocket (Socket.IO)
                              ▼               ▼
                       ┌──────────────────────────────┐      ┌─────────────────────┐
-                      │  Backend (Railway)           │ ───▶ │ Google Gemini (IA)  │
+                      │  Backend (Render)            │ ───▶ │ Google Gemini (IA)  │
                       │  Node.js + Express           │      └─────────────────────┘
                       │  JWT · helmet · rate limit   │
                       │  services/ia.js · cierre     │      ┌─────────────────────┐
-                      └──────┬───────────────┬───────┘      │ OSRM (rutas)        │◀── el frontend
-                             ▼               ▼              └─────────────────────┘
-               ┌───────────────────┐   ┌───────────────┐    ┌─────────────────────┐
-               │ PostgreSQL+PostGIS│   │ Volumen fotos │    │ OpenStreetMap tiles │◀── el frontend
-               │ (Railway)         │   │ (Railway)     │    └─────────────────────┘
-               └───────────────────┘   └───────────────┘
+                      └──────┬───────────────────────┘      │ OSRM (rutas)        │◀── el frontend
+                             ▼                              └─────────────────────┘
+               ┌───────────────────┐                        ┌─────────────────────┐
+               │ PostgreSQL+PostGIS│                        │ OpenStreetMap tiles │◀── el frontend
+               │ + fotos  (Neon)   │                        └─────────────────────┘
+               └───────────────────┘
 ```
 
 **Flujo de un reporte:** el navegador envía el reporte → la IA analiza texto e imagen (máx. 4 s) → PostGIS busca duplicados → se guarda (nuevo evento o +1 a uno existente) → Socket.IO lo envía a todos los mapas abiertos. Si la confianza es baja, queda en revisión para el admin.
@@ -62,11 +62,11 @@ backend/    Node.js + Express
   db/migraciones/   001 inicial, 002 IA, 003 roles y permisos
   db/seed.sql · db/demo.sql
 legacy/     primera versión en HTML/CSS (referencia)
-DESPLIEGUE.md   guía paso a paso para publicar en Railway y Vercel
+DESPLIEGUE.md   guía paso a paso para publicar gratis en Neon, Render y Vercel
 ```
 
 ## Tecnologías
-React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Railway · Vercel · PWA (service worker) · qrcode
+React 18 · Vite · MapLibre GL JS · OpenStreetMap · OSRM · Node.js · Express · PostgreSQL · PostGIS · Socket.IO · Google Gemini · JWT · bcrypt · helmet · express-rate-limit · multer · Neon · Render · Vercel · PWA (service worker) · qrcode
 
 Cambiar el nombre de la app: `frontend/src/config.js` → `APP_NAME`.
 
@@ -98,7 +98,7 @@ npm run qr -- https://tu-app.vercel.app   # genera qr-mireporte.png
 ```
 
 ## Publicar en internet
-Sigue [DESPLIEGUE.md](DESPLIEGUE.md): backend + PostGIS en **Railway** y frontend en **Vercel**.
+Sigue [DESPLIEGUE.md](DESPLIEGUE.md): base de datos en **Neon**, backend en **Render** y frontend en **Vercel** (todo con planes gratuitos).
 
 ### Cuentas de prueba (solo desarrollo)
 Las crea `npm run seed`. **Cámbienlas (variables `SEED_PASSWORD_*`) antes de desplegar.**

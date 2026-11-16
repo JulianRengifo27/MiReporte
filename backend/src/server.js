@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import { config } from './config.js';
 import { pool } from './db.js';
 import { iniciarSocket } from './socket.js';
-import { carpetaFotos } from './services/almacenamiento.js';
+import { carpetaFotos, leerFoto } from './services/almacenamiento.js';
 import { iniciarCierreAutomatico } from './services/cierre.js';
 import { leerToken } from './middleware/auth.js';
 import rutasAuth from './routes/auth.js';
@@ -28,8 +28,19 @@ app.use(cors({ origin: config.frontends }));
 app.use(express.json({ limit: '100kb' }));
 app.use(leerToken); // si viene un token válido, queda en req.usuario
 
-// Fotos subidas (en desarrollo, carpeta local)
-app.use('/uploads', express.static(carpetaFotos, { maxAge: '7d' }));
+// Fotos guardadas en carpeta (modo "disco" y fotos antiguas de desarrollo)
+app.use('/uploads', express.static(carpetaFotos, { maxAge: '7d', fallthrough: true }));
+
+// Fotos guardadas en la base de datos (modo "bd", el de producción)
+app.get('/api/fotos/:id', async (req, res, next) => {
+  try {
+    const foto = await leerFoto(req.params.id);
+    if (!foto) return res.status(404).json({ error: 'Foto no encontrada' });
+    res.set('Content-Type', foto.tipo_mime);
+    res.set('Cache-Control', 'public, max-age=604800, immutable'); // una foto nunca cambia: 7 días en caché
+    res.send(foto.datos);
+  } catch (err) { next(err); }
+});
 
 // Rutas de la API
 app.get('/api/salud', async (_req, res) => {

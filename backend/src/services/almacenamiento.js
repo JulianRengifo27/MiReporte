@@ -1,15 +1,19 @@
-// Guardado de fotos.
-// En desarrollo se guardan en una carpeta local (uploads/).
-// Para pasar a la nube (S3, Cloudinary, etc.) solo hay que cambiar guardarFoto():
-// el resto del código únicamente usa la URL que devuelve.
+// ===== Guardado de fotos =====
+// Dos modos (variable FOTOS_EN en el .env):
+//   · "bd"    (por defecto) → la foto se guarda en PostgreSQL, tabla "fotos". Ideal para hostings
+//                             gratuitos como Render, que borran los archivos al reiniciarse.
+//   · "disco"               → la foto se guarda en la carpeta UPLOAD_DIR (útil con un volumen).
+// El resto del código solo usa la URL que devuelve guardarFoto(), así que cambiar de modo
+// (o pasar a S3/Cloudinary en el futuro) no afecta nada más.
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import multer from 'multer';
 import { config } from '../config.js';
+import { query } from '../db.js';
 
 export const carpetaFotos = path.resolve(config.carpetaFotos);
-fs.mkdirSync(carpetaFotos, { recursive: true });
+if (config.fotosEn === 'disco') fs.mkdirSync(carpetaFotos, { recursive: true });
 
 const EXTENSIONES = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/heic': '.heic' };
 
@@ -23,11 +27,26 @@ export const subirFoto = multer({
   },
 }).single('foto');
 
-// Guarda el archivo y devuelve su URL pública
+// Guarda el archivo y devuelve su URL pública.
+// El nombre es aleatorio (UUID): no revela nada del usuario ni del archivo original.
 export async function guardarFoto(archivo) {
   if (!archivo) return null;
-  // Nombre aleatorio: no revela nada del usuario ni del archivo original
-  const nombre = crypto.randomUUID() + EXTENSIONES[archivo.mimetype];
-  await fs.promises.writeFile(path.join(carpetaFotos, nombre), archivo.buffer);
-  return `${config.urlPublica}/uploads/${nombre}`;
+  const id = crypto.randomUUID();
+  if (config.fotosEn === 'disco') {
+    const nombre = id + EXTENSIONES[archivo.mimetype];
+    await fs.promises.writeFile(path.join(carpetaFotos, nombre), archivo.buffer);
+    return `${config.urlPublica}/uploads/${nombre}`;
+  }
+  await query(
+    'INSERT INTO fotos (id, tipo_mime, datos, tamano) VALUES ($1, $2, $3, $4)',
+    [id, archivo.mimetype, archivo.buffer, archivo.size]
+  );
+  return `${config.urlPublica}/api/fotos/${id}`;
+}
+
+// Devuelve una foto guardada en la base de datos (o null si no existe)
+export async function leerFoto(id) {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const { rows: [f] } = await query('SELECT tipo_mime, datos FROM fotos WHERE id = $1', [id]);
+  return f || null;
 }

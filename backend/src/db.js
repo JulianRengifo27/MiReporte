@@ -4,7 +4,9 @@ import { config } from './config.js';
 
 export const pool = new pg.Pool({
   connectionString: config.databaseUrl,
-  ssl: config.databaseSsl ? { rejectUnauthorized: false } : false,
+  // Neon y otros hostings exigen conexión cifrada (DATABASE_SSL=true o "?sslmode=require" en la URL).
+  // Si no se pide, no se fuerza nada y se respeta lo que diga la URL.
+  ...(config.databaseSsl && { ssl: { rejectUnauthorized: false } }),
   max: 10,
 });
 
