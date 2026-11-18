@@ -219,12 +219,18 @@ export async function analizarReporte({ tipo, descripcion, foto }) {
   // Texto e imagen se analizan al mismo tiempo para ahorrar tiempo
   const [texto, imagen] = await Promise.all([analizarTexto({ tipo, descripcion }), analizarImagen({ tipo, foto })]);
   const confianza = calcularConfianza({ texto, imagen, tipo });
+  // Va a revisión del administrador si:
+  //  · la confianza es baja, o
+  //  · la IA dice que la foto NO corresponde al tipo reportado (la foto contradice el reporte,
+  //    aunque el texto suene bien: por ejemplo, "hay un incendio" con una selfie), o
+  //  · la IA dice que el texto no es coherente.
+  const contradiccion = imagen.corresponde === false || texto.coherente === false;
   return {
     texto,
     imagen,
     confianza,
     prioridad: calcularPrioridad({ gravedad: texto.gravedad, tipo }),
-    estado: confianza < PARAMETROS.umbralRevision ? 'pendiente_revision' : 'activa',
+    estado: confianza < PARAMETROS.umbralRevision || contradiccion ? 'pendiente_revision' : 'activa',
   };
 }
 
