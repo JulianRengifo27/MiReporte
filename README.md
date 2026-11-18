@@ -14,7 +14,7 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
 ## Funcionalidades
 | Requerimiento | Cómo se cumple |
 |---|---|
-| **RF01** Reportar | Botón flotante → tipo, pin GPS ajustable, descripción y foto. 3 toques. **Requiere cuenta** (decisión del equipo para reducir reportes falsos); consultar el mapa es libre. |
+| **RF01** Reportar | Botón flotante → tipo, pin GPS ajustable y **descripción o foto (al menos una)**. **Requiere cuenta** (decisión del equipo para reducir reportes falsos); consultar el mapa es libre. |
 | **RF02** Mapa en tiempo real | MapLibre + OpenStreetMap, íconos y colores por tipo, áreas circulares de riesgo, Socket.IO |
 | **RF03** Integración oficial | Panel oficial: reportes con sello "✔ Verificado" que toman el control de los eventos ciudadanos |
 | **RF04** Rutas alternativas | Desvío escrito por la entidad + **🧭 Ruta segura**: escribes a dónde vas (buscador Photon/OSM) o tocas el mapa, y OSRM calcula y dibuja una ruta que esquiva las emergencias reportadas, con link a Google Maps |

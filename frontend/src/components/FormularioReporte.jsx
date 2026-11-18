@@ -50,6 +50,8 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
     ev.preventDefault();
     if (enviando) return;
     if (!tipo) { setError('Elige el tipo de emergencia.'); return; }
+    // Se necesita al menos una descripción o una foto para que la IA pueda revisar el reporte
+    if (!descripcion.trim() && !foto) { setError('Escribe una descripción corta o adjunta una foto.'); return; }
     setEnviando(true);
     setError('');
     try {
@@ -95,8 +97,10 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
           <small>Arrastra el pin o toca el mapa para ajustar el lugar exacto.</small>
         </div>
 
+        <p className="nota-requisito">Escribe una descripción corta <strong>o</strong> adjunta una foto (al menos una de las dos), para que podamos verificar el reporte.</p>
+
         <label className="campo">
-          <span className="campo-etiqueta">3. Descripción corta (opcional)</span>
+          <span className="campo-etiqueta">3. Descripción corta</span>
           <textarea
             value={descripcion}
             maxLength={MAX_DESC}
@@ -108,7 +112,7 @@ export default function FormularioReporte({ ubicacion, estadoGPS, onEnviar, onCe
         </label>
 
         <div className="campo">
-          <span className="campo-etiqueta">4. Foto (opcional)</span>
+          <span className="campo-etiqueta">4. Foto</span>
           <label className="boton boton-secundario boton-foto">
             📷 {foto ? 'Cambiar foto' : 'Tomar o adjuntar foto'}
             <input type="file" accept="image/*" capture="environment" onChange={elegirFoto} hidden />

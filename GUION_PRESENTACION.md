@@ -95,13 +95,15 @@ Además, si el usuario está dentro o muy cerca de una zona de riesgo, la plataf
 
 **[Pantalla]** Clic en el botón rojo "Reportar emergencia".
 
-Reportar está pensado para hacerse en segundos, en tres toques: abrir el formulario, elegir el tipo de emergencia y enviar.
+Reportar está pensado para hacerse en pocos segundos: elegir el tipo de emergencia, escribir una frase corta o tomar una foto, y enviar.
 
 El formulario tiene cuatro partes:
 - El tipo de emergencia, con botones grandes.
 - La ubicación, que se toma automáticamente del GPS. Si no es exacta, se puede ajustar arrastrando el pin o tocando el mapa.
-- Una descripción corta, opcional.
-- Una foto, opcional, que se puede tomar en el momento con la cámara del celular.
+- Una descripción corta.
+- Una foto, que se puede tomar en el momento con la cámara del celular.
+
+Se necesita al menos una de las dos: la descripción o la foto. Así la inteligencia artificial siempre tiene algo que revisar para saber si el reporte es real. Si se intenta enviar sin ninguna, la plataforma lo indica.
 
 **[Pantalla]** Elegir "Accidente", escribir "Choque entre un carro y una moto, un carril cerrado" y enviar.
 
@@ -117,11 +119,11 @@ Cada reporte pasa por un filtro de cuatro capas antes de publicarse:
 
 **Capa 2 – Texto.** Google Gemini analiza la descripción: revisa si tiene sentido, si corresponde al tipo elegido y qué tan grave es en una escala de 1 a 5.
 
-**Capa 3 – Imagen.** Si hay foto, Gemini revisa si la imagen corresponde a la emergencia reportada.
+**Capa 3 – Imagen.** Si hay foto, Gemini revisa si la imagen corresponde a la emergencia reportada. La IA no puede saber si una foto es reciente o auténtica, pero sí detecta cuando no tiene relación con lo reportado, por ejemplo una selfie en un reporte de incendio.
 
 **Capa 4 – Reglas.** Con esta información se calcula un nivel de confianza de 0 a 100 y una prioridad: Alta, Media o Baja.
 
-Si la confianza es baja, el reporte no se publica en el mapa: queda en una cola de revisión para el administrador.
+El reporte no se publica en el mapa y queda en una cola de revisión para el administrador si la confianza es baja, si el texto no tiene sentido o si la foto no corresponde a la emergencia.
 
 **[Pantalla]** En el celular, reportar un incendio con la descripción "jajaja prueba". Mostrar el mensaje "Tu reporte quedó en revisión".
 

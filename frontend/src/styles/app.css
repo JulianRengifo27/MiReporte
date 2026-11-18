@@ -354,3 +354,6 @@ button.tarjeta:hover { border-color: #cfcfd6; }
   position: fixed; left: 50%; bottom: 8rem; transform: translateX(-50%); z-index: 60; max-width: calc(100% - 2rem);
   background: var(--texto); color: var(--fondo); padding: 0.8rem 1.2rem; border-radius: var(--radio); box-shadow: var(--sombra); font-weight: 600;
 }
+
+/* Aviso: se necesita descripción o foto */
+.nota-requisito { margin: 0; padding: 0.55rem 0.8rem; border-radius: 10px; background: var(--fondo-suave); color: var(--texto); font-size: 0.86rem; }

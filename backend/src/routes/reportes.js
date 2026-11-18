@@ -46,6 +46,11 @@ router.post('/', requierePermiso('reportar'), limiteReportes, (req, res, next) =
 
     const { datos, error } = validar(req.body);
     if (error) return res.status(400).json({ error });
+    // Se necesita al menos una descripción o una foto: sin ninguna de las dos,
+    // la IA no tiene nada que revisar para saber si el reporte es real.
+    if (!datos.descripcion && !req.file) {
+      return res.status(400).json({ error: 'Escribe una descripción corta o adjunta una foto para enviar el reporte.' });
+    }
 
     let cliente;
     try {
