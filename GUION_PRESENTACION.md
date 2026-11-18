@@ -51,7 +51,11 @@ En todas las páginas está visible el aviso: "Esta plataforma no reemplaza la l
 
 **[Pantalla]** Clic en "Ver el mapa".
 
-El mapa usa OpenStreetMap. Se centra en la ubicación del usuario; si el usuario no da permiso de ubicación, se centra en Bogotá.
+El mapa usa OpenStreetMap. Se centra en la ubicación del usuario, que aparece como un punto azul con la etiqueta "Tú" y un círculo que indica el margen de error del GPS. Si el usuario no da permiso de ubicación, el mapa se centra en Bogotá.
+
+**[Pantalla]** Mover el mapa y luego tocar el botón "Mi ubicación" (debajo de los botones de zoom).
+
+Si el usuario se desplaza por el mapa, el botón "Mi ubicación" lo regresa a su posición actual.
 
 En la parte superior aparece un resumen con el número de emergencias a menos de 2 kilómetros.
 

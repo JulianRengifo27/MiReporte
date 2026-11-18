@@ -21,7 +21,7 @@ const AVISO_123 = 'Esta plataforma no reemplaza la línea 123. En una emergencia
 export default function App() {
   const ruta = useRuta();
   const { usuario, verificando, salir, tiene } = useSesion();
-  const { ubicacion, estadoGPS } = useUbicacion();
+  const { ubicacion, estadoGPS, precision, pedirUbicacion } = useUbicacion();
   const [escala, setEscala] = usePreferencia('mireporte-escala', 1);
   const [contraste, setContraste] = usePreferencia('mireporte-contraste', false);
   const [escucharPagina, setEscucharPagina] = useState(null);
@@ -49,7 +49,7 @@ export default function App() {
     case '/privacidad': pagina = <Privacidad />; break;
     case '/terminos': pagina = <Terminos />; break;
     case '/compartir': pagina = <Compartir />; break;
-    case '/mapa': pagina = <Inicio ubicacion={ubicacion} estadoGPS={estadoGPS} registrarEscuchar={setEscucharPagina} />; break;
+    case '/mapa': pagina = <Inicio ubicacion={ubicacion} estadoGPS={estadoGPS} precision={precision} pedirUbicacion={pedirUbicacion} registrarEscuchar={setEscucharPagina} />; break;
     default: pagina = <Bienvenida />;
   }
   const esMapa = ruta === '/mapa';

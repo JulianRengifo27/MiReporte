@@ -16,3 +16,5 @@ export const IconoTelefono = (p) => <Base {...p}><path d="M5 4h4l2 5-2.5 1.5a11 
 export const IconoMas = (p) => <Base {...p}><path d="M12 5v14M5 12h14" /></Base>;
 export const IconoFlecha = (p) => <Base {...p}><path d="M5 12h14M13 6l6 6-6 6" /></Base>;
 export const IconoAjustes = (p) => <Base {...p}><path d="M4 7h10M18 7h2M4 17h4M12 17h8" /><circle cx="16" cy="7" r="2" /><circle cx="10" cy="17" r="2" /></Base>;
+// Mira de ubicación (botón "Mi ubicación")
+export const IconoUbicacion = (p) => <Base {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3" /><circle cx="12" cy="12" r="8" /></Base>;

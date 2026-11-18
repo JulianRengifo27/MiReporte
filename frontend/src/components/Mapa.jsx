@@ -29,7 +29,13 @@ function htmlPopup(e, ubicacion) {
 
 const VACIO = { type: 'FeatureCollection', features: [] };
 
-export default function Mapa({ emergencias, ubicacion, seleccionada, onSeleccionar, ruta, destino, eligiendoDestino, onElegirDestino }) {
+export default function Mapa({ emergencias, ubicacion, estadoGPS, precision, centrar, seleccionada, onSeleccionar, ruta, destino, eligiendoDestino, onElegirDestino }) {
+  const ubicacionRef = useRef(ubicacion);
+  ubicacionRef.current = ubicacion;
+  const estadoGPSRef = useRef(estadoGPS);
+  estadoGPSRef.current = estadoGPS;
+  const precisionRef = useRef(precision);
+  precisionRef.current = precision;
   const marcadorDestino = useRef(null);
   const eligiendoRef = useRef(eligiendoDestino);
   eligiendoRef.current = eligiendoDestino;
@@ -99,9 +105,14 @@ export default function Mapa({ emergencias, ubicacion, seleccionada, onSeleccion
       m.on('click', 'areas-relleno', (ev) => { if (!eligiendoRef.current) onSeleccionarRef.current?.(ev.features[0].properties.id); });
       m.on('mouseenter', 'areas-relleno', () => { m.getCanvas().style.cursor = 'pointer'; });
       m.on('mouseleave', 'areas-relleno', () => { m.getCanvas().style.cursor = ''; });
+      // Margen de error del GPS (círculo azul claro alrededor del punto del usuario)
+      m.addSource('precision', { type: 'geojson', data: VACIO });
+      m.addLayer({ id: 'precision-relleno', type: 'fill', source: 'precision', paint: { 'fill-color': '#2563eb', 'fill-opacity': 0.1 } });
+      m.addLayer({ id: 'precision-borde', type: 'line', source: 'precision', paint: { 'line-color': '#2563eb', 'line-width': 1, 'line-opacity': 0.4 } });
       listo.current = true;
       pintarAreas();
       pintarRuta();
+      pintarPrecision();
     });
     // Modo "elegir destino": tocar el mapa fija el destino de la ruta segura
     m.on('click', (ev) => { if (eligiendoRef.current) onElegirRef.current?.({ lat: ev.lngLat.lat, lng: ev.lngLat.lng }); });
@@ -130,19 +141,55 @@ export default function Mapa({ emergencias, ubicacion, seleccionada, onSeleccion
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emergencias]);
 
-  // 3) Punto azul con la ubicación del usuario; se recentra hasta que el usuario mueva el mapa
+  // 3) Punto azul con la ubicación REAL del usuario (solo si el GPS funciona: si no, no mostramos
+  //    un "estás aquí" falso en Bogotá). Se recentra hasta que el usuario mueva el mapa.
+  const primeraUbicacion = useRef(true);
   useEffect(() => {
     const m = mapa.current;
+    if (estadoGPS !== 'ok') {
+      marcadorUsuario.current?.remove();
+      marcadorUsuario.current = null;
+      pintarPrecision();
+      return;
+    }
     if (!marcadorUsuario.current) {
       const el = document.createElement('div');
       el.className = 'marcador-usuario';
       el.title = 'Tu ubicación';
+      el.setAttribute('role', 'img');
+      el.setAttribute('aria-label', 'Tu ubicación');
+      el.innerHTML = '<span class="marcador-usuario-pulso"></span><span class="marcador-usuario-punto"></span><span class="marcador-usuario-etiqueta">Tú</span>';
       marcadorUsuario.current = new maplibregl.Marker({ element: el }).setLngLat([ubicacion.lng, ubicacion.lat]).addTo(m);
     } else {
       marcadorUsuario.current.setLngLat([ubicacion.lng, ubicacion.lat]);
     }
-    if (!usuarioMovioMapa.current) m.jumpTo({ center: [ubicacion.lng, ubicacion.lat] });
-  }, [ubicacion]);
+    pintarPrecision();
+    if (!usuarioMovioMapa.current) {
+      // La primera vez que llega el GPS, acercamos el mapa a la persona
+      if (primeraUbicacion.current) m.flyTo({ center: [ubicacion.lng, ubicacion.lat], zoom: 15 });
+      else m.jumpTo({ center: [ubicacion.lng, ubicacion.lat] });
+      primeraUbicacion.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ubicacion, estadoGPS, precision]);
+
+  // Círculo azul claro alrededor del punto: el margen de error del GPS
+  function pintarPrecision() {
+    const m = mapa.current;
+    if (!m || !listo.current) return;
+    const datos = estadoGPSRef.current === 'ok' && precisionRef.current
+      ? { type: 'FeatureCollection', features: [{ type: 'Feature', properties: {}, geometry: circuloGeoJSON(ubicacionRef.current, Math.min(precisionRef.current, 2000)) }] }
+      : VACIO;
+    m.getSource('precision')?.setData(datos);
+  }
+
+  // 3b) Botón "Mi ubicación": cada vez que cambia "centrar", volar a la ubicación del usuario
+  useEffect(() => {
+    if (!centrar || !mapa.current) return;
+    usuarioMovioMapa.current = false;
+    mapa.current.flyTo({ center: [ubicacion.lng, ubicacion.lat], zoom: Math.max(mapa.current.getZoom(), 15) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [centrar]);
 
   // 5) Ruta segura: dibujar la línea y ajustar el zoom para que se vea completa
   useEffect(() => {

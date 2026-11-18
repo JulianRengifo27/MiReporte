@@ -11,10 +11,27 @@ import AlertasClima from '../components/AlertasClima.jsx';
 import AlertaProximidad, { mensajeProximidad } from '../components/AlertaProximidad.jsx';
 import FormularioReporte from '../components/FormularioReporte.jsx';
 import PanelRuta from '../components/PanelRuta.jsx';
-import { IconoRuta } from '../components/Iconos.jsx';
+import { IconoRuta, IconoUbicacion } from '../components/Iconos.jsx';
 import { calcularRutaSegura } from '../utils/rutas.js';
 
-export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
+export default function Inicio({ ubicacion, estadoGPS, precision, pedirUbicacion, registrarEscuchar }) {
+  // Botón "Mi ubicación": cada clic suma 1 y el mapa vuela a la ubicación del usuario
+  const [centrar, setCentrar] = useState(0);
+  const [buscandoUbicacion, setBuscandoUbicacion] = useState(false);
+  const [avisoUbicacion, setAvisoUbicacion] = useState('');
+  async function irAMiUbicacion() {
+    setAvisoUbicacion('');
+    setBuscandoUbicacion(true);
+    try {
+      await pedirUbicacion();
+      setCentrar((n) => n + 1);
+    } catch (err) {
+      setAvisoUbicacion(err.message);
+      setTimeout(() => setAvisoUbicacion(''), 6000);
+    } finally {
+      setBuscandoUbicacion(false);
+    }
+  }
   const { usuario } = useSesion();
   const [emergencias, setEmergencias] = useState([]);
   const [alertasClima, setAlertasClima] = useState([]);
@@ -211,6 +228,7 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
         <section className="zona-mapa">
           <Mapa
             emergencias={conDistancia} ubicacion={ubicacion}
+            estadoGPS={estadoGPS} precision={precision} centrar={centrar}
             seleccionada={seleccionada} onSeleccionar={setSeleccionada}
             ruta={ruta} destino={destino}
             eligiendoDestino={rutaEstado === 'eligiendo'} onElegirDestino={elegirDestino}
@@ -222,6 +240,17 @@ export default function Inicio({ ubicacion, estadoGPS, registrarEscuchar }) {
                 onCerrar={cerrarRuta} onOtroDestino={empezarRuta}
               />
             : <button type="button" className="boton-ruta-segura" onClick={empezarRuta}><IconoRuta tam={18} /> Ruta segura</button>}
+          <button
+            type="button"
+            className={`boton-mi-ubicacion ${estadoGPS === 'ok' ? 'gps-ok' : ''}`}
+            onClick={irAMiUbicacion}
+            disabled={buscandoUbicacion}
+            aria-label="Centrar el mapa en mi ubicación"
+            title="Mi ubicación"
+          >
+            <IconoUbicacion tam={20} />
+          </button>
+          {avisoUbicacion && <div className="aviso-ubicacion" role="alert">{avisoUbicacion}</div>}
           <div className="leyenda" aria-label="Leyenda de colores">
             {Object.values(TIPOS).map((t) => (
               <span key={t.etiqueta}><i style={{ background: t.color }} />{t.etiqueta}</span>
