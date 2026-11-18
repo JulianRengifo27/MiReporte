@@ -8,7 +8,7 @@ import {
 } from '../components/Iconos.jsx';
 
 const PASOS = [
-  { icono: IconoCamara, titulo: 'Reporta', texto: 'Elige qué pasa, confirma el lugar en el mapa y agrega una foto si quieres. Sin cuenta, en segundos.' },
+  { icono: IconoCamara, titulo: 'Reporta', texto: 'Con tu cuenta, elige qué pasa, confirma el lugar en el mapa y agrega una foto si quieres. En segundos.' },
   { icono: IconoChispa, titulo: 'Se verifica', texto: 'La inteligencia artificial une los reportes repetidos, filtra los falsos y asigna una prioridad.' },
   { icono: IconoCampana, titulo: 'Todos se enteran', texto: 'La emergencia aparece al instante en el mapa de quienes están cerca, con recomendaciones.' },
 ];
@@ -35,7 +35,7 @@ export default function Bienvenida() {
       <section className="hero">
         <IconoLogo tam={64} className="hero-logo" />
         <h1 className="hero-titulo">Reporta emergencias en segundos.<br /><span>Entérate de lo que pasa a tu alrededor.</span></h1>
-        <p className="hero-texto">{APP_NAME} reúne en un solo mapa los reportes de la ciudadanía y de las entidades oficiales. Gratis, sin descargas y sin registro.</p>
+        <p className="hero-texto">{APP_NAME} reúne en un solo mapa los reportes de la ciudadanía y de las entidades oficiales. Gratis y sin descargas: consulta el mapa libremente y crea tu cuenta para reportar.</p>
         <div className="hero-acciones">
           <a className="boton boton-primario boton-grande" href="#/mapa?reportar">Reportar emergencia</a>
           <a className="boton boton-secundario boton-grande" href="#/mapa">Ver el mapa <IconoFlecha tam={18} /></a>

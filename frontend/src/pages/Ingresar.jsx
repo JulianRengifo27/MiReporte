@@ -7,7 +7,10 @@ import { ir, useRuta } from '../ruta.js';
 export default function Ingresar({ mensaje }) {
   const { entrar } = useSesion();
   const ruta = useRuta();
-  const [modo, setModo] = useState('login'); // 'login' | 'registro'
+  // Si viene del aviso "Crea tu cuenta para reportar", la dirección trae ?registro y/o ?reportar
+  const opciones = window.location.hash.split('?')[1] || '';
+  const vieneAReportar = opciones.includes('reportar');
+  const [modo, setModo] = useState(opciones.includes('registro') ? 'registro' : 'login'); // 'login' | 'registro'
   const [datos, setDatos] = useState({ nombre: '', email: '', password: '', acepta: false });
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -23,7 +26,9 @@ export default function Ingresar({ mensaje }) {
         : await registrarse({ nombre: datos.nombre, email: datos.email, password: datos.password, acepta_politica: datos.acepta });
       entrar(r.token, r.usuario);
       // Lleva a cada rol a su sección principal (si venía de una página protegida, se queda en ella)
-      if (ruta === '/ingresar') {
+      // Si venía a reportar, vuelve al mapa con el formulario abierto
+      if (vieneAReportar) ir('/mapa?reportar');
+      else if (ruta === '/ingresar') {
         const p = r.usuario.permisos;
         ir(p.includes('revisar_reportes') ? '/admin' : p.includes('publicar_oficial') ? '/oficial' : '/mapa');
       }
@@ -38,7 +43,11 @@ export default function Ingresar({ mensaje }) {
     <div className="pagina pagina-angosta">
       <h2>{modo === 'login' ? 'Iniciar sesión' : 'Crear cuenta de ciudadano'}</h2>
       {mensaje && <p className="nota">{mensaje}</p>}
-      <p className="nota">No necesitas cuenta para reportar. Con una cuenta puedes ver el historial de tus reportes.</p>
+      <p className="nota">
+        {vieneAReportar
+          ? 'Inicia sesión o crea tu cuenta y volverás directo al formulario de reporte.'
+          : 'Con una cuenta puedes reportar emergencias y ver el historial de tus reportes. Ver el mapa no requiere cuenta.'}
+      </p>
 
       <form className="formulario" onSubmit={enviar}>
         {modo === 'registro' && (

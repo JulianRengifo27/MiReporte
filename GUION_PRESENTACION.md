@@ -19,8 +19,12 @@ Convención: el texto normal es lo que se dice. Las líneas que empiezan con **[
 
 - Abrir https://mireporte-production.up.railway.app/api/salud y confirmar que diga "conectada" (despierta el servidor).
 - Abrir https://mi-reporte.vercel.app en el computador del proyector, en la página de inicio.
-- Dejar abiertas dos pestañas más con sesión iniciada: una como **Bomberos** (bomberos@mireporte.test) y otra como **administrador** (admin@mireporte.test). No mostrar contraseñas.
-- Tener la página abierta en un celular (Persona 2) con permiso de ubicación.
+- Para reportar se necesita cuenta. En la ventana principal del proyector (Chrome), iniciar sesión como **ciudadano** (ciudadano@mireporte.test) y volver a la página de inicio.
+- Cada navegador guarda una sola sesión a la vez, así que las otras cuentas van en ventanas distintas:
+  - **Bomberos** (bomberos@mireporte.test): en otro navegador, por ejemplo Microsoft Edge.
+  - **Administrador** (admin@mireporte.test): en una ventana de incógnito (Ctrl + Shift + N en Chrome).
+- No mostrar las contraseñas en pantalla.
+- Tener la página abierta en un celular (Persona 2) con permiso de ubicación y sesión iniciada con una cuenta de ciudadano.
 - Si pasaron más de 3 días desde la última carga de datos de demostración, volver a cargarlos (ver DESPLIEGUE.md, paso 3).
 
 ---
@@ -35,7 +39,7 @@ MiReporte es una plataforma web para reportar y consultar emergencias urbanas: a
 
 Nace de un problema concreto: hoy la información sobre emergencias está dispersa en redes sociales, no está verificada y muchas veces está repetida o es falsa. Además, la ayuda depende casi siempre de una llamada y las entidades se coordinan poco entre ellas.
 
-La plataforma reúne en un solo lugar los reportes de los ciudadanos y los de las entidades oficiales. Es gratuita, no hay que descargar nada y no es obligatorio registrarse para reportar.
+La plataforma reúne en un solo lugar los reportes de los ciudadanos y los de las entidades oficiales. Es gratuita y no hay que descargar nada. Cualquier persona puede consultar el mapa sin cuenta; para reportar se necesita una cuenta, lo que ayuda a reducir los reportes falsos.
 
 ### 2. Página de inicio
 
@@ -101,7 +105,7 @@ El formulario tiene cuatro partes:
 
 **[Pantalla]** Elegir "Accidente", escribir "Choque entre un carro y una moto, un carril cerrado" y enviar.
 
-No es necesario tener cuenta. Si el usuario inició sesión, el reporte también queda guardado en su historial.
+Para reportar se necesita haber iniciado sesión. Si alguien sin cuenta toca "Reportar emergencia", la plataforma le pide crear su cuenta o iniciar sesión y luego lo regresa directamente al formulario. Cada reporte queda guardado en el historial de su autor, pero el nombre de quien reporta nunca se muestra en el mapa.
 
 ### 2. Análisis con inteligencia artificial
 
@@ -153,9 +157,9 @@ Es importante aclarar que es una recomendación: evita las emergencias reportada
 
 ### 2. Cuenta de ciudadano
 
-**[Pantalla]** Clic en "Ingresar" y mostrar el formulario de registro.
+**[Pantalla]** En la ventana principal (sesión de ciudadano) abrir "Mis reportes" y mostrar el reporte que hizo la Persona 2.
 
-Registrarse es opcional. El ciudadano registrado tiene la sección "Mis reportes", donde ve el historial de sus reportes y su estado: publicado, en atención, resuelto o en revisión.
+La cuenta es necesaria para reportar; para consultar el mapa no. El ciudadano registrado tiene la sección "Mis reportes", donde ve el historial de sus reportes y su estado: publicado, en atención, resuelto o en revisión.
 
 Para registrarse se pide nombre, correo y contraseña, y se debe aceptar la política de privacidad.
 
@@ -186,7 +190,7 @@ En esta sección está el código QR que lleva directamente a la plataforma.
 
 ### 1. Panel de entidad oficial
 
-**[Pantalla]** Cambiar a la pestaña con la sesión de Bomberos y abrir "Panel oficial".
+**[Pantalla]** Cambiar a la ventana de Edge con la sesión de Bomberos y abrir "Panel oficial".
 
 Las entidades autorizadas —Bomberos, Tránsito, Cruz Roja, Defensa Civil y Alcaldía— tienen un panel propio. Sus cuentas solo las puede crear el administrador.
 
@@ -205,7 +209,7 @@ Las entidades también pueden publicar reportes oficiales directamente. Estos sa
 
 ### 2. Panel de administrador
 
-**[Pantalla]** Cambiar a la pestaña con la sesión de administrador y abrir "Administración".
+**[Pantalla]** Cambiar a la ventana de incógnito con la sesión de administrador y abrir "Administración".
 
 El administrador tiene cuatro secciones:
 - **Revisión:** los reportes que la inteligencia artificial marcó como dudosos. Para cada uno se muestra el análisis y la razón. El administrador decide si lo aprueba o lo rechaza.

@@ -17,7 +17,8 @@ export function Privacidad() {
 
       <h3>1. ¿Qué datos recogemos?</h3>
       <ul>
-        <li><strong>Si reportas sin cuenta:</strong> el tipo de emergencia, la ubicación del pin, la descripción y la foto (si la envías). No pedimos tu nombre ni tu teléfono.</li>
+        <li><strong>Si solo consultas el mapa:</strong> no necesitas cuenta y no guardamos datos tuyos.</li>
+        <li><strong>Cuando reportas:</strong> el tipo de emergencia, la ubicación del pin, la descripción y la foto (si la envías), asociados a tu cuenta para que veas tu historial. No pedimos tu teléfono.</li>
         <li><strong>Si creas una cuenta:</strong> nombre, correo y contraseña. La contraseña se guarda <strong>cifrada</strong> (bcrypt): nadie, ni los administradores, puede leerla.</li>
         <li>Datos técnicos mínimos (dirección IP) para evitar spam. No se guardan junto a tus reportes.</li>
       </ul>

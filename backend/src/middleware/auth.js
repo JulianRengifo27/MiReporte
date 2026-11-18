@@ -9,7 +9,7 @@ export function crearToken(usuario) {
 }
 
 // Lee el token si viene (Authorization: Bearer xxx). No obliga a estar logueado:
-// así un ciudadano puede reportar sin cuenta, y si tiene cuenta, el reporte queda en su historial.
+// así el mapa y las consultas funcionan sin cuenta; las rutas que lo exigen usan requierePermiso().
 export function leerToken(req, _res, next) {
   const cabecera = req.headers.authorization || '';
   if (cabecera.startsWith('Bearer ')) {

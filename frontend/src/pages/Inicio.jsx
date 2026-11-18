@@ -11,6 +11,7 @@ import AlertasClima from '../components/AlertasClima.jsx';
 import AlertaProximidad, { mensajeProximidad } from '../components/AlertaProximidad.jsx';
 import FormularioReporte from '../components/FormularioReporte.jsx';
 import PanelRuta from '../components/PanelRuta.jsx';
+import AvisoCuenta from '../components/AvisoCuenta.jsx';
 import { IconoRuta, IconoUbicacion } from '../components/Iconos.jsx';
 import { calcularRutaSegura } from '../utils/rutas.js';
 
@@ -32,7 +33,7 @@ export default function Inicio({ ubicacion, estadoGPS, precision, pedirUbicacion
       setBuscandoUbicacion(false);
     }
   }
-  const { usuario } = useSesion();
+  const { usuario, verificando } = useSesion();
   const [emergencias, setEmergencias] = useState([]);
   const [alertasClima, setAlertasClima] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -73,7 +74,8 @@ export default function Inicio({ ubicacion, estadoGPS, precision, pedirUbicacion
   // (también si ya estábamos en el mapa y cambia la dirección)
   useEffect(() => {
     const revisar = () => {
-      if (window.location.hash.includes('reportar')) {
+      // Solo "#/mapa?reportar" (no "#/ingresar?reportar", que también contiene la palabra)
+      if (/^#\/mapa\?.*reportar/.test(window.location.hash)) {
         setFormAbierto(true);
         window.history.replaceState(null, '', '#/mapa');
       }
@@ -265,9 +267,11 @@ export default function Inicio({ ubicacion, estadoGPS, precision, pedirUbicacion
 
       {confirmacion && <div className="toast" role="status">{confirmacion}</div>}
 
-      {formAbierto && (
+      {/* Para reportar se necesita cuenta: con sesión se abre el formulario; sin sesión, el aviso */}
+      {formAbierto && usuario && (
         <FormularioReporte ubicacion={ubicacion} estadoGPS={estadoGPS} onEnviar={enviarReporte} onCerrar={() => setFormAbierto(false)} />
       )}
+      {formAbierto && !usuario && !verificando && <AvisoCuenta onCerrar={() => setFormAbierto(false)} />}
 
       {!formAbierto && zonaCerca && (
         <AlertaProximidad

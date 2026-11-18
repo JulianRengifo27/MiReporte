@@ -1,6 +1,7 @@
-// POST /api/reportes — crear un reporte sin necesidad de login
+// POST /api/reportes — crear un reporte (requiere haber iniciado sesión)
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
+import { requierePermiso } from '../middleware/auth.js';
 import { pool } from '../db.js';
 import { subirFoto, guardarFoto } from '../services/almacenamiento.js';
 import { buscarPorId } from '../services/eventos.js';
@@ -14,12 +15,14 @@ const TIPOS = ['accidente', 'incendio', 'inundacion', 'deslizamiento', 'trancon'
 const TIPOS_CON_AREA = { inundacion: 200, deslizamiento: 200, incendio: 100 };
 const TIPOS_QUE_BLOQUEAN = ['accidente', 'trancon', 'inundacion', 'deslizamiento', 'incendio'];
 
-// Anti-spam: máximo 5 reportes cada 10 minutos por dirección IP
+// Anti-spam: máximo 5 reportes cada 10 minutos por cuenta
+// (se cuenta por usuario, así varias personas en la misma red Wi-Fi no se bloquean entre sí)
 const limiteReportes = rateLimit({
   windowMs: 10 * 60 * 1000,
   limit: 5,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
+  keyGenerator: (req) => `usuario-${req.usuario.id}`,
   message: { error: 'Enviaste muchos reportes seguidos. Espera unos minutos e inténtalo de nuevo.' },
 });
 
@@ -35,7 +38,8 @@ function validar(cuerpo) {
   return { datos: { tipo, lat, lng, descripcion: descripcion || null } };
 }
 
-router.post('/', limiteReportes, (req, res, next) => {
+// Primero se verifica la sesión (401 si no hay cuenta) y luego el límite anti-spam
+router.post('/', requierePermiso('reportar'), limiteReportes, (req, res, next) => {
   // multer procesa el formulario (campos + foto)
   subirFoto(req, res, async (errFoto) => {
     if (errFoto) return res.status(400).json({ error: errFoto.code === 'LIMIT_FILE_SIZE' ? 'La foto no puede pesar más de 5 MB.' : errFoto.message });
@@ -64,8 +68,14 @@ router.post('/', limiteReportes, (req, res, next) => {
         unido = true;
         eventoId = duplicado.id;
         estadoAntes = duplicado.estado;
-        const cantidad = duplicado.cantidad_reportes + 1;
-        const confianza = Math.min(100, duplicado.confianza + (analisis.estado === 'activa' ? 12 : 4));
+        // Cada persona cuenta UNA sola vez: si esta cuenta ya había reportado este evento,
+        // no sube el contador ni la confianza (evita que alguien "fuerce" la publicación repitiendo).
+        const { rowCount: yaReporto } = await cliente.query(
+          'SELECT 1 FROM reportes WHERE evento_id = $1 AND usuario_id = $2 LIMIT 1', [eventoId, req.usuario.id]
+        );
+        const cantidad = duplicado.cantidad_reportes + (yaReporto ? 0 : 1);
+        const confianza = yaReporto ? duplicado.confianza
+          : Math.min(100, duplicado.confianza + (analisis.estado === 'activa' ? 12 : 4));
         // Un evento en revisión se publica si ya alcanzó la confianza o si varias personas lo confirman
         estadoFinal = duplicado.estado === 'pendiente_revision' &&
           (confianza >= PARAMETROS.umbralRevision || cantidad >= PARAMETROS.reportesParaPublicar)
@@ -95,8 +105,8 @@ router.post('/', limiteReportes, (req, res, next) => {
          VALUES ($3, $4, $5, ${punto}, $6, $7, $8, $9, $10, $11) RETURNING id`,
         [datos.lat, datos.lng, datos.tipo, datos.descripcion, foto_url, eventoId,
           analisis.estado, analisis.prioridad, analisis.confianza, resumenIA,
-          // Si el ciudadano inició sesión, el reporte queda en SU historial (nunca se muestra públicamente)
-          req.usuario?.id || null]
+          // El reporte queda en el historial del usuario (nunca se muestra públicamente quién reportó)
+          req.usuario.id]
       );
       await cliente.query('COMMIT');
 

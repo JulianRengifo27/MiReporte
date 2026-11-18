@@ -1,7 +1,7 @@
 {
   "name": "MiReporte · Emergencias urbanas",
   "short_name": "MiReporte",
-  "description": "Reporta y consulta emergencias urbanas en tiempo real. Gratis y sin registro.",
+  "description": "Reporta y consulta emergencias urbanas en tiempo real. Gratis y sin descargas.",
   "lang": "es-CO",
   "start_url": "/#/mapa",
   "scope": "/",

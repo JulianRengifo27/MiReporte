@@ -1,6 +1,6 @@
 # MiReporte · Plataforma Web de Emergencias Urbanas
 
-Plataforma web **gratuita, sin descargas y sin registro obligatorio** para reportar y consultar emergencias urbanas en Colombia (accidentes, incendios, inundaciones, deslizamientos, trancones).
+Plataforma web **gratuita y sin descargas** para reportar y consultar emergencias urbanas en Colombia (accidentes, incendios, inundaciones, deslizamientos, trancones).
 
 **Equipo:** Julian Rengifo Forero, José Giraldo Sarmiento, Johan Wilches Olarte, Valerie Rincón Zuluaga y Daniel Galindo Madero.
 
@@ -14,7 +14,7 @@ La información sobre emergencias está dispersa en redes sociales, sin verifica
 ## Funcionalidades
 | Requerimiento | Cómo se cumple |
 |---|---|
-| **RF01** Reportar | Botón flotante → tipo, pin GPS ajustable, descripción y foto. 3 toques. Sin cuenta. |
+| **RF01** Reportar | Botón flotante → tipo, pin GPS ajustable, descripción y foto. 3 toques. **Requiere cuenta** (decisión del equipo para reducir reportes falsos); consultar el mapa es libre. |
 | **RF02** Mapa en tiempo real | MapLibre + OpenStreetMap, íconos y colores por tipo, áreas circulares de riesgo, Socket.IO |
 | **RF03** Integración oficial | Panel oficial: reportes con sello "✔ Verificado" que toman el control de los eventos ciudadanos |
 | **RF04** Rutas alternativas | Desvío escrito por la entidad + **🧭 Ruta segura**: escribes a dónde vas (buscador Photon/OSM) o tocas el mapa, y OSRM calcula y dibuja una ruta que esquiva las emergencias reportadas, con link a Google Maps |
@@ -121,7 +121,8 @@ El middleware `requierePermiso('...')` revisa en cada petición que el usuario s
 
 | Permiso | Qué permite | Anónimo | Ciudadano | Entidad oficial | Admin |
 |---|---|:-:|:-:|:-:|:-:|
-| *(ninguno)* | Ver el mapa y reportar emergencias | ✅ | ✅ | ✅ | ✅ |
+| *(ninguno)* | Ver el mapa, la lista, las alertas y usar Ruta segura | ✅ | ✅ | ✅ | ✅ |
+| `reportar` | Reportar emergencias (requiere cuenta) | — | ✅ | ✅ | ✅ |
 | `ver_mis_reportes` | Ver el historial de sus propios reportes | — | ✅ | ✅ | ✅ |
 | `publicar_oficial` | Publicar reportes con sello "Verificado" | — | — | ✅ | ✅ |
 | `gestionar_eventos` | Confirmar eventos, cambiar estado (En atención / Resuelta), escribir desvíos | — | — | ✅ | ✅ |
@@ -138,7 +139,7 @@ El middleware `requierePermiso('...')` revisa en cada petición que el usuario s
 | Método | Ruta | Permiso | Descripción |
 |---|---|---|---|
 | GET | `/api/salud` | público | Estado del servidor y la base |
-| POST | `/api/reportes` | público | Crear reporte (`multipart/form-data`: `tipo`, `lat`, `lng`, `descripcion?`, `foto?`). Máx. 5 cada 10 min por IP. Si viene token, queda en el historial del usuario |
+| POST | `/api/reportes` | `reportar` | Crear reporte (`multipart/form-data`: `tipo`, `lat`, `lng`, `descripcion?`, `foto?`). Requiere sesión. Máx. 5 cada 10 min por cuenta. Queda en el historial del usuario |
 | GET | `/api/eventos?lat=&lng=&radio=` | público | Emergencias cercanas ordenadas por distancia |
 | GET | `/api/eventos/:id` | público | Detalle |
 | GET | `/api/alertas-climaticas` | público | Alertas vigentes |
