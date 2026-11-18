@@ -120,7 +120,9 @@ button { font-family: inherit; font-size: 1rem; cursor: pointer; }
 .aviso-ok { background: var(--fondo-suave); color: var(--texto); }
 .aviso-error { background: var(--acento-suave); color: var(--acento-oscuro); }
 
-.clima { border-bottom: 1px solid var(--borde); background: var(--superficie); }
+/* La barra de alertas ocupa una sola línea; al abrirla, el detalle flota ENCIMA del mapa
+   (position: absolute) en vez de empujar el contenido, para no aplastar el mapa en el celular */
+.clima { position: relative; z-index: 6; border-bottom: 1px solid var(--borde); background: var(--superficie); }
 .clima-cabecera {
   width: 100%; display: flex; gap: 0.6rem; align-items: center; text-align: left;
   padding: 0.45rem 1rem; border: none; background: none; color: var(--texto); min-height: 44px; font-size: 0.88rem;
@@ -132,7 +134,13 @@ button { font-family: inherit; font-size: 1rem; cursor: pointer; }
 .clima-roja { --nivel: #d6382f; }
 .clima-naranja { --nivel: #f08c00; }
 .clima-amarilla { --nivel: #f5c400; }
-.clima-detalle { padding: 0 1rem 0.8rem; display: flex; flex-direction: column; gap: 0.6rem; max-height: 50vh; overflow-y: auto; }
+.clima-detalle {
+  position: absolute; top: 100%; left: 0; right: 0;
+  padding: 0.6rem 1rem 0.9rem; display: flex; flex-direction: column; gap: 0.6rem;
+  max-height: 55vh; overflow-y: auto; background: var(--superficie);
+  border-bottom: 1px solid var(--borde); box-shadow: 0 12px 24px rgba(16, 16, 24, 0.15);
+}
+@media (min-width: 900px) { .clima-detalle { left: auto; width: 460px; border-left: 1px solid var(--borde); border-radius: 0 0 0 var(--radio); } }
 .clima-item { padding: 0.6rem 0.8rem; border: 1px solid var(--borde); border-radius: 10px; font-size: 0.9rem; }
 .clima-item p { margin: 0.2rem 0; }
 .clima-item ul { margin: 0.3rem 0 0; padding-left: 1.2rem; color: var(--texto-suave); }

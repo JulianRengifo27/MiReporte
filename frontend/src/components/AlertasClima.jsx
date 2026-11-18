@@ -1,17 +1,28 @@
 // Alertas climáticas en una sola línea compacta (diseño minimalista).
 // Muestra la más importante; al tocarla se despliegan todas con sus recomendaciones.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const ORDEN = { roja: 1, naranja: 2, amarilla: 3 };
 
 export default function AlertasClima({ alertas }) {
   const [abierta, setAbierta] = useState(false);
+  const caja = useRef(null);
+
+  // El detalle flota sobre el mapa: se cierra al tocar fuera de él o con la tecla Escape
+  useEffect(() => {
+    if (!abierta) return;
+    const fuera = (e) => { if (caja.current && !caja.current.contains(e.target)) setAbierta(false); };
+    const tecla = (e) => { if (e.key === 'Escape') setAbierta(false); };
+    document.addEventListener('pointerdown', fuera);
+    window.addEventListener('keydown', tecla);
+    return () => { document.removeEventListener('pointerdown', fuera); window.removeEventListener('keydown', tecla); };
+  }, [abierta]);
   if (!alertas.length) return null;
   const ordenadas = [...alertas].sort((a, b) => (ORDEN[a.nivel] || 9) - (ORDEN[b.nivel] || 9));
   const principal = ordenadas[0];
 
   return (
-    <section className={`clima clima-${principal.nivel}`} aria-label="Alertas climáticas">
+    <section ref={caja} className={`clima clima-${principal.nivel}`} aria-label="Alertas climáticas">
       <button type="button" className="clima-cabecera" aria-expanded={abierta} onClick={() => setAbierta(!abierta)}>
         <span className="clima-punto" aria-hidden="true" />
         <span className="clima-resumen">
