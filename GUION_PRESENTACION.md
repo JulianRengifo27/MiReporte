@@ -1,212 +1,251 @@
-# Guion de presentación · MiReporte
+# Guion de presentación – MiReporte
 
-**Duración total:** 15 minutos (+ 5 de preguntas)
-**Página:** https://mi-reporte.vercel.app
-**Presentan:** 3 personas
+Plataforma web de información de emergencias urbanas
+Página: https://mi-reporte.vercel.app
+Duración aproximada: 16 minutos (4 minutos por persona)
 
-| Rol | Quién | Parte | Tiempo |
-|---|---|---|---|
-| **Persona 1** · El problema y el ciudadano | _(nombre)_ | Problema, solución, demo del ciudadano | 0:00 – 5:00 |
-| **Persona 2** · La inteligencia | _(nombre)_ | IA, tiempo real, ruta segura | 5:00 – 10:00 |
-| **Persona 3** · Las entidades y la tecnología | _(nombre)_ | Panel oficial, administrador, seguridad, cierre | 10:00 – 15:00 |
+## Distribución
 
-> 💡 **Cómo leer este guion:** lo que está en *cursiva* es lo que se **dice**. Lo que está en **🖱️** es lo que se **hace** en pantalla. Los recuadros 🛟 son el plan B si algo falla.
-
----
-
-## ✅ Antes de empezar (10 minutos antes)
-
-- [ ] Abrir https://mireporte-production.up.railway.app/api/salud → debe decir `"db":"conectada"`.
-- [ ] Abrir https://mi-reporte.vercel.app en el **computador del proyector**.
-- [ ] Abrir la misma página en **un celular** (de la Persona 2) con datos móviles. Dar permiso de ubicación.
-- [ ] Tener una **segunda pestaña** con la sesión de **Bomberos** ya iniciada (`bomberos@mireporte.test`).
-- [ ] Tener una **tercera pestaña** con la sesión de **admin** ya iniciada (`admin@mireporte.test`).
-- [ ] Tener a mano una **foto de un incendio o choque** en el celular (sacada de internet y guardada).
-- [ ] Si pasaron más de 3 días desde que se cargó la demo: volver a cargarla (`npm.cmd run demo`, ver DESPLIEGUE.md).
-- [ ] Imprimir o poner en la diapositiva el **código QR** (`frontend/qr-mireporte.png`).
-
-> ⚠️ **No mostrar las contraseñas en pantalla.** Iniciar las sesiones antes de que empiece la presentación.
-
----
-
-## PARTE 1 · El problema y el ciudadano (Persona 1 · 5 min)
-
-### 1.1 Gancho (30 s)
-🖱️ *Pantalla: página de inicio de MiReporte.*
-
-> *"Levanten la mano quienes se enteraron de un trancón, una inundación o un accidente en Bogotá por un grupo de WhatsApp o por Twitter… ¿Y cuántas veces esa información era vieja, exagerada o simplemente falsa?"*
-
-### 1.2 El problema (1 min)
-> *"Hoy la información sobre emergencias urbanas está **dispersa** en redes sociales, **sin verificar**, con reportes **falsos o repetidos**. Y cuando alguien necesita ayuda, todo depende de una llamada, mientras las entidades se coordinan poco entre ellas."*
-
-> *"Por eso creamos **MiReporte**: una plataforma web **gratuita, sin descargas y sin registro obligatorio**, donde cualquier persona reporta una emergencia en segundos y todos ven en un mapa, en tiempo real, qué está pasando cerca."*
-
-🖱️ *Señalar el logo:* *"Nuestro logo es un pin de mapa con un signo de alerta: 'reporto lo que pasa aquí'."*
-
-### 1.3 Recorrido por el inicio (45 s)
-🖱️ *Bajar despacio por la página de inicio.*
-
-> *"Aquí arriba ven un dato en vivo: cuántas emergencias activas hay ahora en Bogotá. Más abajo explicamos cómo funciona en tres pasos: **reportas, la IA verifica y todos se enteran**."*
-
-🖱️ *Señalar el aviso de la línea 123.*
-> *"Y algo muy importante: **la plataforma no reemplaza la línea 123**. Lo dejamos visible en todas las páginas."*
-
-### 1.4 Demo: el mapa (1 min)
-🖱️ *Clic en **Ver el mapa**.*
-
-> *"El mapa usa **OpenStreetMap**. Se centra en tu ubicación —o en Bogotá si no das permiso— y arriba te dice cuántas emergencias hay a menos de 2 kilómetros."*
-
-🖱️ *Si aparece la alerta "¡Atención! Zona de riesgo cerca", dejarla un segundo y explicarla:*
-> *"Como estamos cerca de una zona de deslizamiento, la app nos avisa sola. Incluso puede **leer la alerta en voz alta**."* 🖱️ *Clic en **Escuchar**, luego **Entendido**.*
-
-🖱️ *Señalar los colores:* *"Cada tipo tiene su color: incendio naranja, inundación azul —que se dibuja como un **área de riesgo**—, deslizamiento café…"*
-
-🖱️ *Clic en un marcador (por ejemplo, el **choque de la Av. 68**).*
-> *"Al tocar una emergencia vemos qué pasa, a qué hora, su estado, cuántas personas la reportaron, la recomendación de seguridad y el **desvío sugerido** por la entidad. Este tiene el sello azul **Verificado**: lo publicó Tránsito."*
-
-### 1.5 Demo: reportar en 3 toques (1 min 30 s)
-🖱️ *Clic en **Reportar emergencia** (botón rojo).*
-
-> *"Reportar toma tres toques: abrir, elegir qué pasa y enviar. La ubicación sale sola del GPS y se puede ajustar arrastrando el pin. La descripción y la foto son opcionales."*
-
-🖱️ *Elegir **Accidente**, escribir: `Choque entre un carro y una moto en la Calle 26 con Carrera 30, un carril cerrado`. Clic en **Enviar reporte**.*
-
-> *"Listo. Sin cuenta, sin descargar nada… y ya aparece en el mapa."*
-
-> 🎤 *"Ahora mi compañero(a) les va a contar qué pasó **por dentro** en esos dos segundos."* → **pasa a Persona 2**
-
----
-
-## PARTE 2 · La inteligencia (Persona 2 · 5 min)
-
-### 2.1 Tiempo real (1 min)
-🖱️ *Mostrar el **celular** a la cámara/al público (o pasarlo a la pantalla si se puede).*
-
-> *"Mientras mi compañero reportaba en el computador, yo tenía la página abierta en mi celular. **Sin recargar**, el reporte apareció aquí en menos de 5 segundos. Eso es porque usamos **WebSockets**: el servidor le avisa al instante a todos los que tienen el mapa abierto."*
-
-🛟 *Si el celular no lo muestra: recargar la página y explicar que la conexión en tiempo real se recupera sola.*
-
-### 2.2 La IA: filtro por capas (2 min)
-> *"El gran problema de las redes es la información falsa o repetida. Por eso cada reporte pasa por un **filtro de cuatro capas**:"*
-
-> *"**Capa 1 · Duplicados.** Si 10 personas reportan el mismo choque, no queremos 10 puntos en el mapa. La base de datos, con **PostGIS**, busca si ya hay un reporte igual a menos de 200 metros en la última hora, y si lo hay, lo **une** al mismo evento."*
-
-🖱️ *En el mapa, abrir el **choque de la Av. 68**: señalar "**7 personas reportaron esto**".*
-
-> *"**Capa 2 · Texto.** Usamos **Google Gemini** para leer la descripción: ¿tiene sentido?, ¿corresponde al tipo elegido?, ¿qué tan grave es del 1 al 5?"*
-
-> *"**Capa 3 · Foto.** Si hay foto, Gemini la mira y dice si corresponde a la emergencia."*
-
-> *"**Capa 4 · Reglas.** Con todo eso calculamos un **nivel de confianza de 0 a 100** y una **prioridad Alta, Media o Baja**. Si la confianza es muy baja, el reporte **no se publica**: queda en revisión para un administrador."*
-
-### 2.3 Demo: un reporte falso (1 min)
-🖱️ *En el **celular**: Reportar emergencia → **Incendio** → descripción `jajaja prueba xd` → Enviar.*
-
-> *"Miren: escribí un reporte en broma. La IA detectó que no tiene sentido y **no salió en el mapa**. Me dice que quedó **en revisión**. Así evitamos que la plataforma se llene de bromas."*
-
-> *"Y si Gemini falla o se cae, tenemos **reglas de respaldo**: la app nunca deja de funcionar."*
-
-### 2.4 Demo: Ruta segura (1 min)
-🖱️ *En el computador: clic en **Ruta segura** (botón arriba a la izquierda del mapa). En **"¿A dónde vas?"** escribir `Estadio El Campin` y elegir la primera sugerencia.*
-
-> *"Escribo a dónde voy —una dirección o un lugar— y la app lo encuentra. También puedo tocar el destino directamente en el mapa."*
-
-> *"Si una emergencia bloquea una vía, **Ruta segura** calcula un camino que la **esquiva**. Pedimos varias rutas, descartamos las que pasan por emergencias reportadas y dibujamos en **verde** la que las evita y es más rápida. En rojo punteado quedan las que descartamos."*
-
-🖱️ *Señalar los datos: distancia, tiempo, minutos extra por el desvío y "esquiva 1". Clic en **Abrir en Google Maps**.*
-> *"Y con un toque la abres en Google Maps para que te guíe."*
-
-> ⚠️ *Decirlo con precisión:* *"Es la ruta más rápida que **evita las emergencias reportadas en MiReporte**. No conoce accidentes que nadie haya reportado ni el tráfico en tiempo real; por eso es una recomendación."* (No decir "la mejor vía sin accidentes".)
-
-🛟 *Si la ruta no calcula (el servidor de rutas está saturado): esperar 5 segundos y repetir. Si sigue fallando, mostrar el botón **Ver ruta alternativa** dentro de un popup y explicar que el desvío también lo escriben las entidades.*
-
-> 🎤 *"Y hablando de entidades…"* → **pasa a Persona 3**
-
----
-
-## PARTE 3 · Las entidades y la tecnología (Persona 3 · 5 min)
-
-### 3.1 Panel de entidad oficial (1 min 30 s)
-🖱️ *Cambiar a la pestaña con la sesión de **Bomberos** → **Panel oficial**.*
-
-> *"Las entidades —Bomberos, Tránsito, Cruz Roja, Defensa Civil, Alcaldía— tienen su propio panel. Aquí ven las emergencias ordenadas por prioridad."*
-
-🖱️ *Buscar el **accidente** que reportó la Persona 1. Clic en **✔ Confirmar** y luego **En atención**. Escribir en "Desvío recomendado": `Tome la Av. Américas y retome por la Carrera 50` → **Guardar**.*
-
-> *"Con un clic confirmamos el reporte ciudadano —ahora sale con el sello **Verificado**—, lo marcamos **En atención** y escribimos el desvío. Todos los que tengan el mapa abierto lo ven al instante."*
-
-🖱️ *Volver a la pestaña del mapa y abrir ese evento: mostrar el sello y el desvío.*
-
-> *"Además pueden publicar reportes oficiales desde cero, y esos tienen prioridad sobre los ciudadanos."*
-
-### 3.2 Panel de administrador (1 min 30 s)
-🖱️ *Cambiar a la pestaña con la sesión de **admin** → **Administración** → pestaña **Revisión**.*
-
-> *"Aquí llega lo que la IA marcó como dudoso. Miren el reporte en broma de hace un momento: la IA explica **por qué** lo marcó —'no describe una emergencia real'— y el administrador decide: **aprobar o rechazar**."*
-
-🖱️ *Clic en **✕ Rechazar** sobre el reporte en broma.*
-
-🖱️ *Pestaña **Estadísticas**.*
-> *"El administrador también ve estadísticas —reportes por tipo y por día—, gestiona usuarios y roles, y elimina eventos viejos. Y los eventos sin actividad se cierran solos."*
-
-### 3.3 Seguridad y privacidad (1 min)
-> *"Cumplimos la **Ley 1581** de protección de datos:"*
-> - *"**Nunca** mostramos públicamente quién hizo un reporte."*
-> - *"Las contraseñas se guardan **cifradas** con bcrypt; ni nosotros podemos leerlas."*
-> - *"Cada rol solo puede hacer lo que le corresponde: un ciudadano no entra al panel de Bomberos."*
-> - *"Tenemos política de privacidad, términos y límites contra el spam."*
-
-> *"Y la **Ley 1618** de accesibilidad:"* 🖱️ *Abrir el menú de **accesibilidad** (icono de persona arriba a la derecha) y mostrar **A+**, **Alto contraste** y **Escuchar alerta**.*
-> *"Botones grandes, letra ajustable, alto contraste y lectura en voz alta."*
-
-### 3.4 Tecnología (30 s)
-🖱️ *(Opcional) Diapositiva con el diagrama de arquitectura del README.*
-
-> *"Por dentro: **React** en el frontend publicado en **Vercel**; **Node.js con Express** en el backend en **Railway**; **PostgreSQL con PostGIS** para buscar por distancia; **WebSockets** para el tiempo real; **Google Gemini** para la IA; y **OpenStreetMap** para el mapa y las rutas."*
-
-### 3.5 Cierre (30 s)
-🖱️ *Página **Compartir** (o diapositiva con el QR).*
-
-> *"MiReporte se puede **instalar en el celular** como una app, sin pasar por ninguna tienda. Los invitamos a escanear este código y probarla ahora mismo."*
-
-> *"Información verificada, en tiempo real y en un solo lugar. Porque en una emergencia, **cada segundo cuenta**. Muchas gracias."*
-
-> **Los tres:** *"¿Preguntas?"*
-
----
-
-## 🙋 Preguntas frecuentes (repartidas)
-
-| Pregunta | Responde | Respuesta corta |
+| Persona | Funcionalidades que explica | Tiempo |
 |---|---|---|
-| ¿Qué pasa si alguien reporta algo falso? | Persona 2 | La IA lo detecta y queda en revisión; el admin lo rechaza. Además hay límite de 5 reportes cada 10 minutos por conexión. |
-| ¿Y si la IA se equivoca? | Persona 2 | Nunca decide sola si hay duda: lo dudoso va al administrador. Y si 3 personas reportan lo mismo, se publica igual. |
-| ¿Cómo saben que una entidad es real? | Persona 3 | Las cuentas oficiales solo las crea el administrador; nadie puede registrarse como Bomberos. |
-| ¿Se puede usar sin internet? | Persona 1 | La página abre sin señal (es una app web instalable), pero para reportar y ver datos nuevos se necesita conexión. |
-| ¿Cuánto cuesta? | Persona 3 | Para el usuario, nada. Usamos servicios con planes gratuitos o de prueba; para una ciudad real habría que pagar servidores más grandes. |
-| ¿Por qué web y no una app de celular? | Persona 1 | Sin descargas: cualquiera la abre con un link o un QR, en cualquier celular. Y aun así se puede instalar. |
-| ¿Qué datos personales guardan? | Persona 3 | Si reportas sin cuenta, solo el reporte. Si te registras: nombre, correo y contraseña cifrada. Nunca se muestran. |
-| ¿Funciona fuera de Bogotá? | Persona 2 | Sí: el mapa se centra donde estés. Bogotá es solo el punto por defecto y donde están los datos de demostración. |
-| ¿La ruta segura es la mejor vía sin accidentes? | Persona 2 | Es la más rápida que evita las emergencias **reportadas en la plataforma**. No ve tráfico en tiempo real ni lo que nadie reportó; Google Maps complementa eso. |
-| ¿Por qué tarda la primera vez? | Persona 3 | Si el servidor estuvo un rato sin uso puede tardar unos segundos en arrancar; luego responde al instante. |
+| Persona 1: ________________ | Qué es MiReporte, página de inicio, mapa, lista de emergencias y alertas | 0:00 – 4:00 |
+| Persona 2: ________________ | Reportar una emergencia, análisis con inteligencia artificial y tiempo real | 4:00 – 8:00 |
+| Persona 3: ________________ | Ruta segura, cuenta de ciudadano, accesibilidad e instalación como app | 8:00 – 12:00 |
+| Persona 4: ________________ | Panel de entidades oficiales, panel de administrador, seguridad y tecnología | 12:00 – 16:00 |
+
+Convención: el texto normal es lo que se dice. Las líneas que empiezan con **[Pantalla]** indican lo que se hace en el computador.
+
+## Preparación (antes de empezar)
+
+- Abrir https://mireporte-production.up.railway.app/api/salud y confirmar que diga "conectada" (despierta el servidor).
+- Abrir https://mi-reporte.vercel.app en el computador del proyector, en la página de inicio.
+- Dejar abiertas dos pestañas más con sesión iniciada: una como **Bomberos** (bomberos@mireporte.test) y otra como **administrador** (admin@mireporte.test). No mostrar contraseñas.
+- Tener la página abierta en un celular (Persona 2) con permiso de ubicación.
+- Si pasaron más de 3 días desde la última carga de datos de demostración, volver a cargarlos (ver DESPLIEGUE.md, paso 3).
 
 ---
 
-## 🛟 Si algo falla en vivo
+## Persona 1 – Qué es MiReporte y cómo se consulta la información (4 min)
 
-| Problema | Qué hacer |
+### 1. Presentación de la plataforma
+
+**[Pantalla]** Página de inicio.
+
+MiReporte es una plataforma web para reportar y consultar emergencias urbanas: accidentes, incendios, inundaciones, deslizamientos, trancones y otros eventos.
+
+Nace de un problema concreto: hoy la información sobre emergencias está dispersa en redes sociales, no está verificada y muchas veces está repetida o es falsa. Además, la ayuda depende casi siempre de una llamada y las entidades se coordinan poco entre ellas.
+
+La plataforma reúne en un solo lugar los reportes de los ciudadanos y los de las entidades oficiales. Es gratuita, no hay que descargar nada y no es obligatorio registrarse para reportar.
+
+### 2. Página de inicio
+
+**[Pantalla]** Bajar despacio por la página de inicio.
+
+En la parte superior está el acceso a las dos acciones principales: reportar una emergencia y ver el mapa. Debajo se muestra un dato en vivo con el número de emergencias activas en la ciudad.
+
+La página explica el funcionamiento en tres pasos: el ciudadano reporta, la inteligencia artificial verifica el reporte, y la emergencia aparece en el mapa de todos.
+
+En todas las páginas está visible el aviso: "Esta plataforma no reemplaza la línea 123". MiReporte es una herramienta de información, no un servicio de atención de emergencias.
+
+### 3. El mapa
+
+**[Pantalla]** Clic en "Ver el mapa".
+
+El mapa usa OpenStreetMap. Se centra en la ubicación del usuario; si el usuario no da permiso de ubicación, se centra en Bogotá.
+
+En la parte superior aparece un resumen con el número de emergencias a menos de 2 kilómetros.
+
+Cada tipo de emergencia tiene un ícono y un color: rojo para accidentes, naranja para incendios, azul para inundaciones, café para deslizamientos y amarillo para trancones. Las inundaciones, los deslizamientos y los incendios se dibujan además como un área circular, que representa la zona de riesgo.
+
+### 4. Detalle de una emergencia
+
+**[Pantalla]** Clic en un marcador, por ejemplo el accidente de la Avenida 68.
+
+Al tocar una emergencia se abre su detalle: la descripción, la hora del reporte, el estado, la prioridad, cuántas personas la reportaron y una recomendación de seguridad según el tipo.
+
+El estado puede ser Activa, En atención o Resuelta. Si la publicó una entidad oficial, aparece el sello azul "Verificado" con el nombre de la entidad.
+
+Cuando la emergencia bloquea una vía, se muestra el desvío recomendado por la entidad y el botón "Ver ruta alternativa", que abre Google Maps.
+
+### 5. Lista de emergencias y alertas
+
+**[Pantalla]** Señalar la lista lateral (en celular, la pestaña "Lista").
+
+Las mismas emergencias aparecen en una lista ordenada por cercanía, con su tipo, hora, distancia, estado y origen (ciudadano u oficial).
+
+**[Pantalla]** Abrir la barra de alertas climáticas.
+
+En la parte superior están las alertas climáticas, por ejemplo lluvias fuertes, con sus recomendaciones.
+
+Además, si el usuario está dentro o muy cerca de una zona de riesgo, la plataforma muestra un aviso automático, por ejemplo: "Estás cerca de una zona de deslizamiento. Aléjate de laderas".
+
+---
+
+## Persona 2 – Reportar una emergencia, inteligencia artificial y tiempo real (4 min)
+
+### 1. Reportar una emergencia
+
+**[Pantalla]** Clic en el botón rojo "Reportar emergencia".
+
+Reportar está pensado para hacerse en segundos, en tres toques: abrir el formulario, elegir el tipo de emergencia y enviar.
+
+El formulario tiene cuatro partes:
+- El tipo de emergencia, con botones grandes.
+- La ubicación, que se toma automáticamente del GPS. Si no es exacta, se puede ajustar arrastrando el pin o tocando el mapa.
+- Una descripción corta, opcional.
+- Una foto, opcional, que se puede tomar en el momento con la cámara del celular.
+
+**[Pantalla]** Elegir "Accidente", escribir "Choque entre un carro y una moto, un carril cerrado" y enviar.
+
+No es necesario tener cuenta. Si el usuario inició sesión, el reporte también queda guardado en su historial.
+
+### 2. Análisis con inteligencia artificial
+
+Cada reporte pasa por un filtro de cuatro capas antes de publicarse:
+
+**Capa 1 – Duplicados.** La base de datos busca si ya existe un reporte del mismo tipo a menos de 200 metros en la última hora. Si existe, el nuevo reporte se une al mismo evento y aumenta el contador. Así, si diez personas reportan el mismo choque, en el mapa aparece un solo evento.
+
+**[Pantalla]** Mostrar en el mapa un evento con "7 personas reportaron esto".
+
+**Capa 2 – Texto.** Google Gemini analiza la descripción: revisa si tiene sentido, si corresponde al tipo elegido y qué tan grave es en una escala de 1 a 5.
+
+**Capa 3 – Imagen.** Si hay foto, Gemini revisa si la imagen corresponde a la emergencia reportada.
+
+**Capa 4 – Reglas.** Con esta información se calcula un nivel de confianza de 0 a 100 y una prioridad: Alta, Media o Baja.
+
+Si la confianza es baja, el reporte no se publica en el mapa: queda en una cola de revisión para el administrador.
+
+**[Pantalla]** En el celular, reportar un incendio con la descripción "jajaja prueba". Mostrar el mensaje "Tu reporte quedó en revisión".
+
+Si el servicio de inteligencia artificial no responde, la plataforma usa reglas de respaldo basadas en palabras clave, así que nunca deja de funcionar.
+
+### 3. Tiempo real
+
+**[Pantalla]** Mostrar el celular junto al computador.
+
+La plataforma funciona en tiempo real. Cuando alguien publica o actualiza una emergencia, el servidor avisa a todos los que tienen el mapa abierto mediante WebSockets. La emergencia aparece en menos de 5 segundos, sin recargar la página.
+
+---
+
+## Persona 3 – Ruta segura, cuenta de ciudadano, accesibilidad e instalación (4 min)
+
+### 1. Ruta segura
+
+**[Pantalla]** En el mapa, clic en "Ruta segura".
+
+Ruta segura calcula un camino hasta un destino evitando las emergencias reportadas en la plataforma.
+
+**[Pantalla]** En "¿A dónde vas?" escribir "Estadio El Campín" y elegir la primera sugerencia.
+
+El destino se puede escribir como dirección o nombre de lugar; la plataforma muestra sugerencias mientras se escribe. También se puede elegir tocando el mapa.
+
+La plataforma pide varias rutas posibles, descarta las que pasan por emergencias activas y muestra en verde la más rápida que las evita. Las rutas descartadas se ven en rojo punteado. El panel indica la distancia, el tiempo estimado y cuántos minutos agrega el desvío.
+
+**[Pantalla]** Clic en "Abrir en Google Maps".
+
+Con el botón "Abrir en Google Maps", el usuario continúa la navegación en la aplicación que ya conoce.
+
+Es importante aclarar que es una recomendación: evita las emergencias reportadas en MiReporte, pero no tiene en cuenta el tráfico en tiempo real ni los incidentes que nadie haya reportado.
+
+### 2. Cuenta de ciudadano
+
+**[Pantalla]** Clic en "Ingresar" y mostrar el formulario de registro.
+
+Registrarse es opcional. El ciudadano registrado tiene la sección "Mis reportes", donde ve el historial de sus reportes y su estado: publicado, en atención, resuelto o en revisión.
+
+Para registrarse se pide nombre, correo y contraseña, y se debe aceptar la política de privacidad.
+
+### 3. Accesibilidad
+
+**[Pantalla]** Abrir el menú de accesibilidad (ícono de persona, arriba a la derecha).
+
+La plataforma sigue la Ley 1618 de accesibilidad. El menú permite:
+- Aumentar o disminuir el tamaño de la letra.
+- Activar el modo de alto contraste.
+- Escuchar las alertas en voz alta.
+
+**[Pantalla]** Activar el alto contraste y luego desactivarlo.
+
+Además, todos los botones son grandes para facilitar su uso en el celular, y la página se puede recorrer con el teclado.
+
+### 4. Instalación como aplicación y código QR
+
+**[Pantalla]** Clic en "Compartir".
+
+MiReporte se puede instalar en el celular como una aplicación, sin pasar por ninguna tienda. En Android se instala desde el menú de Chrome, y en iPhone desde el botón Compartir de Safari, con la opción "Agregar a inicio".
+
+En esta sección está el código QR que lleva directamente a la plataforma.
+
+---
+
+## Persona 4 – Entidades oficiales, administración, seguridad y tecnología (4 min)
+
+### 1. Panel de entidad oficial
+
+**[Pantalla]** Cambiar a la pestaña con la sesión de Bomberos y abrir "Panel oficial".
+
+Las entidades autorizadas —Bomberos, Tránsito, Cruz Roja, Defensa Civil y Alcaldía— tienen un panel propio. Sus cuentas solo las puede crear el administrador.
+
+En la pestaña "Gestionar eventos" ven las emergencias activas ordenadas por prioridad. Por cada una pueden:
+- Confirmarla, lo que le agrega el sello "Verificado".
+- Cambiar su estado a "En atención" o "Resuelta".
+- Escribir el desvío recomendado para los ciudadanos.
+
+**[Pantalla]** Buscar el accidente que reportó la Persona 2. Clic en "Confirmar", luego en "En atención", escribir un desvío y guardar.
+
+Estos cambios se ven al instante en el mapa de todos los usuarios.
+
+**[Pantalla]** Abrir la pestaña "Publicar reporte oficial".
+
+Las entidades también pueden publicar reportes oficiales directamente. Estos salen verificados y tienen prioridad sobre los reportes ciudadanos: si ya había reportes ciudadanos del mismo hecho, el evento pasa a ser oficial.
+
+### 2. Panel de administrador
+
+**[Pantalla]** Cambiar a la pestaña con la sesión de administrador y abrir "Administración".
+
+El administrador tiene cuatro secciones:
+- **Revisión:** los reportes que la inteligencia artificial marcó como dudosos. Para cada uno se muestra el análisis y la razón. El administrador decide si lo aprueba o lo rechaza.
+- **Eventos:** lista de todos los eventos, con opción de eliminar uno o eliminar los antiguos.
+- **Usuarios:** creación de cuentas para las entidades, cambio de roles y desactivación de cuentas.
+- **Estadísticas:** reportes por tipo y por día.
+
+**[Pantalla]** En "Revisión", rechazar el reporte "jajaja prueba" de la Persona 2. Luego abrir "Estadísticas".
+
+Además, las emergencias que pasan varias horas sin actividad se cierran automáticamente.
+
+### 3. Seguridad y privacidad
+
+La plataforma cumple la Ley 1581 de protección de datos personales:
+- Nunca se muestra públicamente quién hizo un reporte.
+- Las contraseñas se guardan cifradas con bcrypt.
+- Las sesiones usan tokens JWT que vencen.
+- Cada rol solo puede hacer lo que le corresponde: ciudadano, entidad oficial o administrador.
+- Hay límites contra el envío masivo de reportes y una política de privacidad y términos de uso.
+
+### 4. Tecnología
+
+La plataforma está construida con:
+- **Frontend:** React con Vite, publicado en Vercel.
+- **Mapa:** MapLibre con OpenStreetMap; rutas con OSRM y búsqueda de lugares con Photon.
+- **Backend:** Node.js con Express, publicado en Railway.
+- **Base de datos:** PostgreSQL con PostGIS, que permite buscar emergencias por distancia.
+- **Tiempo real:** WebSockets con Socket.IO.
+- **Inteligencia artificial:** Google Gemini.
+
+### 5. Cierre
+
+En resumen, MiReporte permite reportar una emergencia en segundos, filtra los reportes falsos y repetidos con inteligencia artificial, muestra la información en tiempo real en un mapa, ofrece rutas que evitan las zonas afectadas y conecta a los ciudadanos con las entidades oficiales.
+
+La plataforma está disponible en https://mi-reporte.vercel.app. Muchas gracias.
+
+---
+
+## Si algo falla durante la presentación
+
+| Situación | Qué hacer |
 |---|---|
-| El mapa no carga datos | Abrir `.../api/salud` en otra pestaña para despertar el servidor; esperar 30 s y recargar. |
-| No aparece la alerta de zona de riesgo | No pasa nada: saltar ese punto. Solo sale si estás cerca de una zona (o sin GPS, en el centro de Bogotá). |
-| El reporte en tiempo real no llega al celular | Recargar el celular; explicar que la conexión se reconecta sola. |
-| La IA tarda | Tiene un límite de 4 s; si Gemini no responde, entran las reglas de respaldo. Decirlo como una ventaja. |
-| Ruta segura no responde | Esperar y repetir; o mostrar el desvío escrito por la entidad. |
-| Se cierra la sesión | Tener las contraseñas anotadas **fuera de la pantalla** para volver a entrar. |
-
----
-
-## 📋 Resumen para recordar (una línea por persona)
-
-- **Persona 1:** *"El problema es la información dispersa y falsa; MiReporte permite reportar en 3 toques y ver todo en un mapa."*
-- **Persona 2:** *"La IA une duplicados, filtra falsos y prioriza; todo llega en tiempo real y te da una ruta segura."*
-- **Persona 3:** *"Las entidades verifican y coordinan, el admin modera, y todo protege los datos y es accesible."*
+| El mapa no carga datos | Abrir /api/salud en otra pestaña, esperar 30 segundos y recargar. |
+| No aparece el aviso de zona de riesgo | Continuar; solo aparece si el usuario está cerca de una zona de riesgo. |
+| El reporte no llega al celular | Recargar la página del celular. |
+| Ruta segura no calcula | Esperar unos segundos y repetir; si sigue fallando, mostrar el desvío escrito por la entidad. |
+| Se cierra una sesión | Volver a iniciarla sin mostrar la contraseña en pantalla. |
